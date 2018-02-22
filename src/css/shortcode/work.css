@@ -1,0 +1,19 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Work style file. All Work related style included in this file.
+
+--------------------------------------*/
+.single-work{}
+.single-work:hover .work-icon{
+	color:#121212;
+}
+.work-icon{
+	font-size:40px;
+	color:#3685E2;
+	transition:all .3s;
+}
+.single-work > h4 {
+  margin: 25px 0;
+  text-transform: uppercase;
+}

@@ -1,0 +1,128 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Footer style file. All footer related style included in this file.
+
+--------------------------------------*/
+.footer-content {
+  color: #f1f1f1;
+  position: relative;
+}
+.footer-logo {
+  margin-bottom: 30px;
+}
+.footer-icon{
+	margin-top:30px;
+}
+.footer-icon a {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 15px;
+  height: 25px;
+  margin-right: 5px;
+  text-align: center;
+  width: 25px;
+}.footer-icon a:hover{
+	color:#0083f3;
+    border: 1px solid #0083f3;	
+} 
+
+h4.footer-title {
+  color: #f1f1f1;
+  font-size: 15px;
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  position: relative;
+  text-transform: uppercase;
+}
+
+h4.footer-title::before {
+    background: #0083f3 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 50px;
+}
+
+.twitter-info{}
+.twitter-info ul{}
+.twitter-info ul li{
+	margin-bottom:30px;
+}
+.twitter-info ul li .twitter-icon {
+  float: left;
+  font-size: 15px;
+}
+.twitter-info ul li .twitter-text {
+  margin-left: 30px;
+}
+.twitter-info ul li:last-child {
+  margin-bottom: 0;
+}
+.footer-menu li a {
+  color: #f1f1f1;
+  line-height: 31px;
+  text-transform: capitalize;
+  position:relative;
+  margin-left:15px;
+  display:block;
+}
+.footer-menu li a:hover{
+	color:#0083f3;
+	transform: translateX(5px);
+} 
+
+.footer-menu li a::before {
+    content: "";
+    font-family: Material-Design-Iconic-Font;
+    font-size: 20px;
+    left: -15px;
+    position: absolute;
+    top: 1px;
+}
+.twitter-info {
+  color: #f1f1f1;
+}
+.contact-info{
+	color:#f1f1f1;
+}
+.contact-info ul {}
+.contact-info ul li {
+  margin-bottom: 25px;
+}
+.contact-info ul li .contact-icon{
+	float:left;
+}
+.contact-info ul li .contact-icon i{
+	font-size:20px;
+}
+.contact-info ul li .contact-text {
+  margin-left: 40px;
+}
+
+.contact-info ul li .contact-text > span {
+  display: block;
+}
+.contact-info ul li:last-child {
+  margin-bottom: 0;
+}
+.footer-content > p {
+  color: #f1f1f1;
+}
+.text-white h1, .text-white p, .text-white h2 {
+  color: #f1f1f1;
+}
+
+/* copyright-area */
+.copyright-left p, .copyright-right p{
+	margin:0;
+	color:#f1f1f1;
+}
+.copyright-right a {
+  color: #f1f1f1;
+}
+.copyright-right a:hover{
+	color:#0083F3;
+}

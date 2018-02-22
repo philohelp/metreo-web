@@ -1,0 +1,82 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Pricing style file. All Pricing related style included in this file.
+
+--------------------------------------*/
+.single-pricing {
+  border: 1px solid #121212;
+  padding-bottom: 25px;
+  position: relative;
+  border-radius:4px;
+  transition:all .4s;
+}
+.single-pricing:hover {
+  background: #ffffff none repeat scroll 0 0;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border: 1px solid #0083F3;  
+}
+.single-pricing:hover a.register {
+	background:#0083F3;
+	color:#fff;
+}
+.single-pricing:hover .price-box > span {
+	background:#0083F3;
+    border: 1px solid #0083F3;
+    color:#fff;	
+}
+.price-box{
+	position:relative;
+}
+.price-head {
+  font-weight: 700;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+.single-pricing:hover .price-box::before {
+	background:#0083F3;
+}
+.price-box::before {
+  background: #121212 none repeat scroll 0 0;
+  bottom: 50%;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+.price-box > span {
+  background: #ffffff none repeat scroll 0 0;
+  border: 1px solid #121212;
+  border-radius: 100%;
+  display: inline-block;
+  font-size: 15px;
+  height: 100px;
+  line-height: 96px;
+  margin: auto;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100px;
+  transition:all .4s;
+}
+.price-box > span:before{
+	position:absolute;
+} 
+.pricing-body {
+  padding: 30px 0;
+}
+.pricing-body ul li {
+  font-size: 18px;
+  line-height: 30px;
+  text-transform: uppercase;
+}
+
+a.register {
+  border: 1px solid #0083F3;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 20px;
+  padding: 10px 60px;
+  text-transform: uppercase;
+}

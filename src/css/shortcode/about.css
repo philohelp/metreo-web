@@ -1,0 +1,60 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is About style file. All About related style included in this file.
+
+--------------------------------------*/
+/*-----------------
+ Home-1 
+------------------- */
+.about-info > p {
+  color: #121212;
+  margin-bottom: 0;
+}
+.about-btn.mt-30 {
+  border: 1px solid #0083F3;
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 15px;
+  padding: 8px 25px;
+  text-transform: uppercase;
+  background:#0083F3;
+  color:#fff;
+}
+.about-btn:hover{
+	background:#fff;
+	color:#0083F3;
+}
+
+/*-----------------
+ Home-2 
+------------------- */
+
+.about-application > h4 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.about_a-btn {
+  border: 1px solid #0083F3;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 12px;
+  padding: 5px 11px;
+  text-transform: capitalize;
+  background:#0083F3;
+  color:#fff;
+}
+.about-application > p {
+  margin-bottom: 20px;
+}
+.about_a-btn:hover{
+	color:#0083F3;
+	background:#fff;
+}
+.about-application {
+    margin-bottom: 50px;
+}
+.about-application:last-child {
+    margin-bottom: 0;
+}
+

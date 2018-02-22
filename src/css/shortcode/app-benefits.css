@@ -1,0 +1,68 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is App Benefits style file. All App Benefits related style included in this file.
+
+--------------------------------------*/
+.apps-benefits-area{
+	position:relative;
+}
+
+.question-accordion .panel-group .panel {
+  margin-bottom: 40px;
+}
+.question-accordion .panel-heading {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border-radius: 0;
+  padding: 0;
+}
+.panel-title{
+	position:relative;
+}
+.panel-title > a {
+  background: #0083f3 none repeat scroll 0 0;
+  border: 1px solid #0083f3;
+  color: #ffffff;
+  position: relative;
+}
+.panel-title > a:hover{
+	color:#fff;
+}
+.panel-title > a::after {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  color: #ffffff;
+  content: "";
+  font-family: Material-Design-Iconic-Font;
+  font-size: 29px;
+  position: absolute;
+  right: 18px;
+  top: 18px;
+}
+.panel-default {
+  border:none;
+}
+.panel-group .panel {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+.panel-title > a.collapsed::after {
+  content: "\f278 ";
+  color:#333;
+}
+.panel-title > a.collapsed, .panel-title > a {
+  display: block;
+  padding: 25px 20px;
+}
+.panel-title {
+	font-size:18px;
+}
+.panel-title > a.collapsed {
+  background: #fff none repeat scroll 0 0;
+  color: #353535;
+}
+a.collapsed{
+	border:1px solid#121212
+}
+.question-accordion {
+  margin-top: 130px;
+}

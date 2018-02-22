@@ -1,0 +1,30 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is 404 style file. All 404 related style included in this file.
+
+--------------------------------------*/
+.not-found-mocup{
+	position:relative;
+}
+.not-fount-text {
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 47%;
+}
+.not-fount-text > h4 {
+  font-size: 40px;
+  line-height: 50px;
+}
+.not-found-section h2 {
+  color: #121212;
+  font-size: 50px;
+  font-weight: 700;
+}
+.not-found-section h3 {
+  color: #121212;
+  font-size: 25px;
+}

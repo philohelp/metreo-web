@@ -1,0 +1,56 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is subcribe style file. All subcribe related style included in this file.
+
+--------------------------------------*/
+.subcribe-area::before {
+  background: #000000 none repeat scroll 0 0;
+  content: "";
+  height: 100%;
+  left: 0;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.subcribe-title p {
+  color: #e3e3e3;
+}
+.subcribe-form form {
+  position: relative;
+}
+.subcribe-form form::before {
+  color: #ffffff;
+  content: "";
+  font-family: Material-Design-Iconic-Font;
+  font-size: 15px;
+  left: 11px;
+  position: absolute;
+  top: 11px;
+}
+.subcribe-form input::-moz-placeholder {
+  color: #ffffff;
+}
+.subcribe-form input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: 1px solid #f1f1f1;
+  border-radius: 4px;
+  color: #ffffff;
+  height: 40px;
+  padding-left: 35px;
+  width: 100%;
+}
+.subcribe-form button {
+  background: #ffffff none repeat scroll 0 0;
+  border: medium none;
+  color: #121212;
+  font-size: 15px;
+  font-weight: 700;
+  height: 40px;
+  padding: 0 23px;
+  position: absolute;
+  right: 0;
+  text-transform: uppercase;
+  top: 0;
+}

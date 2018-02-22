@@ -1,0 +1,188 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Slider style file. All Slider related style included in this file.
+
+--------------------------------------*/
+/*---------------
+Home-1
+----------------- */
+.nivo-directionNav a {
+  border:1px solid#fff;	
+  color: #fff;
+  font-size: 30px;
+  line-height: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in 0s;
+  width: 34px;
+  z-index: 99;
+}
+.slider-container:hover .nivo-directionNav a{opacity:1}
+.nivo-directionNav a:hover {
+  color: #121212;
+  background:#fff;
+}
+
+.slider-container.slider-container-1 .slide1-text1{
+	left: 0;
+	right: 0;
+	margin: auto;
+	text-align: center;
+}
+
+.slide1-text {
+  position: absolute;
+  right: 124px;
+  text-align: right;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 47%;
+}
+.slide1-text.slide1-text-home1 {
+  left: 125px;
+  text-align: left;
+}
+.nivo-controlNav {
+  display: none;
+}
+.middle-text h2 {
+    font-size: 40px;
+    font-weight: 300;
+	text-transform:uppercase;
+}
+.middle-text h2 span {
+    font-weight: 300;
+}
+.cap-text p {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 34px;
+  color:#f1f1f1;
+}
+.cap-readmore {
+  line-height: 50px;
+  margin-top: 20px;
+}
+.cap-readmore > a {
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  color: #fff;
+  display: inline-block;
+  margin-left: 20px;
+  padding: 9px 15px;
+  text-transform: uppercase;
+}
+.cap-readmore > a:hover{
+	background:#fff;
+	color:#121212;
+}
+
+a.white-btn {
+  background: #ffffff none repeat scroll 0 0;
+  color: #333333;
+}
+/*----------------
+  Home-2
+----------------- */
+.slide1-text.slide1-text-2 {
+  left: 106px;
+  text-align: left;
+  width: 52%;
+}
+.white-btn.download-btn-2 {
+  background: #0083f3 none repeat scroll 0 0;
+  border: 1px solid #0083f3;
+  color: #ffffff;
+  font-weight: 700;
+  margin: 0;
+}
+.white-btn.download-btn-2:hover{
+	background:#fff;
+    border:1px solid #fff;
+}
+/*----------------
+  Home-3
+----------------- */
+.slide1-text.slide1-text-3 {
+  margin: auto;
+  right: 105px;
+  width: 50%;
+}
+.slider-container-3 .nivo-directionNav a:hover{
+	background:#0083F3;
+	border: 1px solid #0083F3;
+}
+
+.cap-readmore-3 > a {
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #fff;
+  display: inline-block;
+  margin-left: 20px;
+  padding: 9px 15px;
+  text-transform: uppercase;
+}
+.cap-readmore-3> a:hover{
+	background:#0083F3;
+	color:#121212;
+    border: 1px solid #0083F3;	
+}
+
+a.defult-btn{
+  background: #0083F3 none repeat scroll 0 0;
+  border: 1px solid #0083F3;
+  color: #333333;
+}
+
+/*----------------
+  Home-4
+----------------- */
+.slider-container-4 .slide1-text-4 {
+  left: 100px;
+  text-align: left;
+  width: 48%;
+}
+/*----------------
+  Home-5
+----------------- */
+.slide1-text.slide1-text-4.text-white {
+  width: 60%;
+}
+.slider-area-5 {
+  position: relative;
+}
+.slider-area-5 .cap-text p {
+  margin-bottom: 40px;
+}
+.cap-readmore-5 a {
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  color: #fff;
+  display: inline-block;
+  margin-left: 20px;
+  padding: 9px 15px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.cap-readmore-5 a:hover{
+	background:#fff;
+  color:#121212;
+  text-decoration: none;
+}
+.defult-btn.text-white {
+  color: #fff;
+}
+a.white-btn {
+  background: #ffffff none repeat scroll 0 0;
+  color: #333333;
+  margin-left: 0;
+}
+
+
+

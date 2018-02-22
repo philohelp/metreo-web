@@ -1,0 +1,499 @@
+/* Normal desktop :992px. */
+@media (min-width: 992px) and (max-width: 1200px) {
+/*-------------------------
+ Home-1
+------------------------- */	
+.middle-text h2 {
+  font-size: 35px;
+}
+.cap-text p {
+  font-size: 18px;
+  line-height: 28px;
+}
+.download-btn li {
+  margin: 0 20px;
+}
+.section-title > p {
+  font-size: 16px;
+}
+.single-awesome-feature-text > p {
+  font-size: 14px;
+}
+.single-awesome-feature {
+  margin-bottom: 25px;
+}
+.single-creative-feature {
+  margin-bottom: 15px;
+}
+
+.fa.fa-angle-right.slick-arrow {
+  right: 282px;
+}
+.fa.fa-angle-left.slick-arrow {
+  left: 265px;
+}
+/*-------------------------
+ Home-3
+------------------------- */
+.information-right {
+  margin-top: 0;
+}
+/*-------------------------
+ Blog
+------------------------- */
+.blog-content a h4 {
+  font-size: 15px;
+}
+.masonry-video-btn {
+  top: 29%;
+}
+.not-fount-text {
+  top: 42%;
+}
+
+
+
+}
+
+ 
+/* Tablet desktop :768px. */
+@media (min-width: 768px) and (max-width: 991px) {
+/*-------------------------
+ Home-1
+------------------------- */	
+.main-menu ul li {
+  margin-left: 15px;
+}
+.slide1-text {
+  right: 70px;
+}
+.middle-text h2 {
+  font-size: 24px;
+}
+.cap-text p {
+  font-size: 15px;
+  line-height: 24px;
+}
+.cap-readmore {
+  margin-top: 20px;
+}
+.download-btn li {
+  margin: 0 8px;
+}
+.awesome-feature-img {
+  margin-top: 0;
+  margin-bottom:30px;
+}
+a.register {
+  font-size: 14px;
+  padding: 6px 28px;
+}
+.pricing-body ul li {
+  font-size: 14px;
+  line-height: 28px;
+}
+.creative-feature-text > h4 {
+  font-size: 16px;
+}
+.single-creative-feature {
+  margin-bottom: 25px;
+}
+.fa.fa-angle-right.slick-arrow {
+  right: 246px;
+}
+.fa.fa-angle-left.slick-arrow {
+  left: 254px;
+}
+/*-------------------------
+ Home-2
+------------------------- */
+.about-application-item.mt-70.text-left {
+  margin-top: 0;
+}
+.question-accordion {
+  margin-top: 20px;
+}
+.panel-title {
+  font-size: 14px;
+}
+.question-accordion .panel-group .panel {
+  margin-bottom: 30px;
+}
+.blog-video-btn {
+  top: 22.5%;
+}
+.blog-content h4 {
+  font-size: 15px;
+}
+.blog-meta span {
+  font-size: 14px;
+}
+.search-sidebar form button {
+  width: 75px;
+}
+.blog-details-text > h4 {
+  font-size: 16px;
+}
+.blog-details-text > p {
+  padding-right: 0;
+}
+blockquote {
+  padding: 50px 40px;
+}
+.author-comment-info {
+  padding-right: 0;
+}
+.not-found-section h2 {
+  font-size: 40px;
+}
+.not-fount-text > h4 {
+  font-size: 33px;
+  line-height: 34px;
+  margin-bottom: 0;
+}
+
+
+}
+
+ 
+/* small mobile :320px. */
+@media (max-width: 767px) {
+.container {width:300px}
+/*-------------------------
+ Home-1
+------------------------- */
+.toogle-content {
+	right: -15px;
+}
+.sticky {
+  position: static;
+  animation: none;
+} 
+.logo {
+  margin: 20px 0;
+}
+.download-btn li {
+  margin: 15px 5px;
+}
+.cap-text p {
+  display: none;
+}
+.cap-readmore-5 {
+  display:none;
+}
+.cap-dec.cap-1.wow.fadeInRight {
+  display: none;
+}
+.middle-text h2 {
+  font-size:17px;
+}
+.slide1-text {
+  right: 80px;
+}
+.cap-readmore {
+  margin-top: 10px;
+}
+.slide1-text.slide1-text-home1 {
+  left: 4%;
+}
+.cap-readmore > a {
+  font-size: 12px;
+  margin-left: 7px;
+  padding: 6px 8px;
+}
+.slide1-text {
+  right: 72px;
+  width: 74%;
+}
+.ptb-100 {
+  padding: 50px 0;
+}
+.download-btn li:last-child {
+  margin-bottom: 0;
+}
+.fun-fact-area {
+  padding-bottom: 20px;
+}
+.single-fun {
+  margin-bottom: 30px;
+}
+.awesome-feature-img {
+  margin-bottom: 30px;
+  margin-top: 0;
+  text-align: center;
+}
+.play-btn {
+  font-size: 30px;
+  height: 50px;
+  line-height: 50px;
+  width: 50px;
+}
+.team-area {
+  padding-bottom: 20px;
+}
+.single-team {
+  margin-bottom: 30px;
+}
+.single-pricing {
+  margin-bottom: 30px;
+}
+.pricing-table-area {
+  padding-bottom: 20px;
+}
+.creative-feature-img {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.single-creative-feature.feature-text-right:last-child {
+  margin-bottom: 0;
+}
+.testimonial-area {
+  padding-bottom: 120px;
+  padding-top: 50px;
+}
+.testimonial-text-slider {
+  padding: 0;
+  width: 100%;
+}
+.fa.fa-angle-right.slick-arrow {
+  bottom: -264px;
+  right: 94px;
+}
+.fa.fa-angle-left.slick-arrow {
+  bottom: -264px;
+  left: 80px;
+}
+.footer-area {
+  padding-bottom: 20px;
+}
+.footer-widget {
+  margin-bottom: 30px;
+}
+.copyright-left {
+  text-align: center;
+}
+.copyright-right.text-right {
+  text-align: center;
+}
+/*-------------------------
+ Home-2
+------------------------- */
+.about-application-item.text-right {
+  margin-bottom: 30px;
+}
+.about-application-item.mt-70.text-left {
+  margin-top: 30px;
+}
+.question-accordion {
+  margin-top: 0;
+}
+/*-------------------------
+ Home-3
+------------------------- */
+.slide1-text.slide1-text-3 {
+  width: 67%;
+}
+.single-work {
+  margin-bottom: 30px;
+}
+.work-area.ptb-100 {
+  padding-bottom: 20px;
+}
+.nav-style-3 .owl-carousel .owl-controls .owl-nav div {
+  left: -30px;
+}
+.nav-style-3 .owl-carousel .owl-controls .owl-nav div.owl-next {
+  left: auto;
+  right: -30px;
+}
+/*-------------------------
+ Home-4
+------------------------- */
+.slider-container-4 .slide1-text-4 {
+  left: 73px;
+  width: 100%;
+}
+.share-info-text h1 {
+  font-size: 24px;
+  line-height: 36px;
+  margin-bottom: 15px;
+}
+.share-icon a {
+  font-size: 25px;
+  margin-right: 18px;
+}
+/*-------------------------
+ Home-5
+------------------------- */
+.service-right-img {
+  margin-top: 30px;
+}
+.service-left h2 {
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+/*-------------------------
+ Blog
+------------------------- */
+.breadcrumb li, .breadcrumb li a {
+line-height:32px;
+}
+.breadcrumb-text h2 {
+  margin-bottom: 0;
+}
+.blog-video-btn {
+  top: 14.5%;
+}
+.search-sidebar {
+  margin-top: 30px;
+}
+.single-blog.single-blog-item.blog-right {
+  margin-bottom: 30px;
+}
+.single-sidebar {
+  margin-bottom: 30px;
+}
+.search-sidebar.search-left-sidebar {
+  margin-top: 0;
+}
+.blog-details-text > h4 {
+  font-size: 16px;
+  line-height:30px;
+}
+.blog-details-text > p {
+  padding-right: 0;
+}
+blockquote {
+  padding: 50px 40px;
+}
+.author-comment-info {
+  display: block;
+  float: left;
+  margin-top: 30px;
+  padding-right: 0;
+}
+.comment-area.pt-100 {
+  padding-top: 50px;
+}
+
+/*-------------------------
+ Contact Page
+------------------------- */
+.contact-social-area {
+  padding-bottom: 20px;
+}
+.single-contact-social.text-center {
+  margin-bottom: 30px;
+}
+.form-title {
+  margin-top: 0;
+}
+.cont-submit {
+  margin-bottom: 50px;
+}
+.blog-img > a {
+  display: block;
+}
+.masonry-video-btn {
+  top: 27%;
+}
+
+/*-------------------------
+ 404
+------------------------- */
+.not-found-section h2 {
+  font-size: 22px;
+}
+.not-found-section h3 {
+  font-size: 14px;
+}
+.not-fount-text > h4 {
+  font-size: 11px;
+  line-height: 23px;
+}
+.not-fount-text .blog-btn {
+  margin-top: 0;
+}
+.cap-readmore-5 a {
+	margin-left: 5px;
+	padding: 7px 4px;
+	font-size: 13px;
+}
+.search-inside .position-center-center {
+  width: 90%;
+}
+
+
+
+
+}
+ 
+/* Large Mobile :480px. */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.container {width:450px}
+/*-------------------------
+ Home-1
+------------------------- */
+ .team-img > a {
+  display: block;
+}
+.team-img   img {
+  width: 100%;
+} 
+.sin-opacity {
+  height: 60px;
+  margin-top: 45px;
+  width: 60px;
+}
+.sin-testiImage.slick-current {
+  height: 140px;
+}
+.sin-testiImage.slick-current .sin-opacity {
+  height: 130px;
+  width: 130px;
+}
+.fa.fa-angle-left.slick-arrow {
+  bottom: -219px;
+  left: 155px;
+}
+.fa.fa-angle-right.slick-arrow {
+  bottom: -219px;
+  right: 168px;
+}
+/*-------------------------
+ Home-3
+------------------------- */
+.nav-style-3 .owl-carousel .owl-controls .owl-nav div {
+  left: -20px;
+}
+.nav-style-3 .owl-carousel .owl-controls .owl-nav div.owl-next {
+  left: auto;
+  right: -20px;
+}
+/*-------------------------
+ Blog Section
+------------------------- */
+ .blog-video-btn {
+  top: 22.5%;
+}
+ 
+ .blog-img > a {
+  display: block;
+}
+.blog-img img {
+  width: 100%;
+}
+ .masonry-video-btn {
+  top: 34%;
+}
+/*-------------------------
+ 404
+------------------------- */
+.not-fount-text .blog-btn {
+  margin-top: 0;
+}
+
+
+ 
+}
+ 

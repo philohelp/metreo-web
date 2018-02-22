@@ -1,0 +1,431 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Blog style file. All Blog related style included in this file.
+
+--------------------------------------*/
+/*--------------------------
+	1.Blog-right-sidebar 
+------------------------*/
+
+.single-blog.single-blog-item.blog-right {
+  margin-bottom: 60px;
+}
+.single-blog {
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s ease 0s;
+}
+.single-blog:hover {
+  box-shadow: 0 1px 3px #999999;
+}
+.blog-img > a {
+  display: inline-block;
+  position: relative;
+}
+.blog-img  a::after {
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 111;
+  background:#0083f3;
+  opacity:0;
+  transition:all .4s;
+}
+.single-blog:hover .blog-img  a::after{
+	opacity:.6;
+}
+.blog-img > a::before {
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  content: "\f18e";
+  font-family: Material-Design-Iconic-Font;
+  font-size: 30px;
+  height: 45px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 43%;
+  width: 45px;
+  transform:scale(4);
+  opacity:0;
+  transition:all .4s;
+  z-index:11;
+}
+.single-blog:hover .blog-img > a::before{
+	opacity:1;
+	transform:scale(1);
+	z-index:11111;  
+} 
+
+.blog-content {
+  padding: 20px 20px 30px 20px;
+}
+.blog-meta span {
+  color: #a3a3a3;
+  display: inline-block;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.blog-content a h4{
+  margin-bottom:20px;
+  text-transform: uppercase;
+  transition:all .3s;
+}
+.blog-content p{
+	margin-bottom:0;
+}
+.blog-btn{
+	margin-top:25px;
+}
+a.blog-btn {
+  border: 1px solid #0083f3;
+  display: inline-block;
+  padding: 6px 16px;
+  text-transform: uppercase;
+  font-size: 14px;
+  background:#0083f3;
+  color:#fff;
+  border-radius:3px;
+}
+a.blog-btn:hover{
+	background:#fff;
+	color:#0083f3;
+} 
+/* -------------------
+  1.Blog-right-sidebar
+----------------------  */
+
+.breadcrumb-area::before {
+  background: #000000 none repeat scroll 0 0;
+  content: "";
+  height: 100%;
+  left: 0;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.breadcrumb-text h2 {
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.breadcrumb-bar .breadcrumb {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  line-height: 12px;
+  margin: 0;
+  padding: 8px 0;
+}
+.breadcrumb li, .breadcrumb li a {
+  color: #ffffff;
+  font-size: 24px;
+  text-transform: capitalize;
+}
+.breadcrumb li a:hover{
+	color:#0083f3;
+}
+.single-blog-item{
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);	
+}
+.single-blog-item:hover {
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+.single-blog-item {
+  margin-bottom: 30px;
+}
+
+.blog-video .blog-img > a::before, .blog-video .blog-img > a::after {
+  display: none;
+}
+.blog-video:hover .blog-img a::after {
+  display: none;
+}
+.blog-video-btn {
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 31.5%;
+  transform: translateY(-50%);
+  z-index: 111;
+}
+
+/* -------------------
+  Blog-section
+----------------------  */
+.search-sidebar form {
+    position: relative;
+}
+.search-sidebar form input {
+    border: medium none;
+    height: 55px;
+    width: 100%;
+    background:#F1F1F1;
+    padding-left:15px;	
+}
+.search-sidebar form button {
+  background: #0083f3 none repeat scroll 0 0;
+  border: medium none;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  text-transform: uppercase;
+  width: 125px;
+  top: 0;
+}
+.search-sidebar input::-moz-placeholder {
+  color: #121212;
+  font-size: 15px;
+}
+.single-sidebar {
+  margin-bottom: 50px;
+}
+h3.sidebar-title{
+  color: #121212;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 24px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+.blog-author-img {
+  box-shadow: -1px 0 6px #878787;
+}
+.author-details > h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 30px;
+  text-transform: uppercase;
+}
+.author-details > p {
+  margin:15px 0;
+}
+.sidebar-categories ul li a {
+  border-bottom: 1px solid #b2b2b2;
+  display: block;
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 15px;
+  padding-bottom: 20px;
+  color:#121212;
+}
+.sidebar-categories ul li a:hover{
+	color:#0083F3;
+}
+.single-sidebar-blog > p {
+  line-height: 28px;
+  margin-bottom: 0;
+}
+.single-sidebar-blog > span {
+  color: #0083f3;
+  font-size: 15px;
+  line-height: 28px;
+}
+.single-sidebar-blog {
+  border-bottom: 1px solid #b2b2b2;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+
+
+
+/* -------------------
+  Blog-section
+----------------------  */
+.pagination-section .pagination {
+  margin: 0;
+}
+.pagination > li:first-child > a, .pagination > li:first-child > span {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: 0;
+}
+.pagination > li:last-child > a, .pagination > li:last-child > span {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.pagination-section .pagination > li > a, .pagination > li > span {
+  background: #f1f1f1 none repeat scroll 0 0;
+  border: 1px solid #ffffff;
+  color: #121212;
+  float: left;
+  font-size: 24px;
+  line-height: 1.42857;
+  margin: 0 5px;
+  padding: 12px 18px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.pagination-section .pagination > li > a:hover, .pagination > li > span:hover{
+	background:#0083F3;
+	color:#fff;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);	
+}
+
+/* -------------------
+  Blog-details
+----------------------  */
+.blog-details-meta > span {
+  color: #b2b2b2;
+  display: block;
+  font-size: 15px;
+  margin: 20px 0;
+}
+.blog-details-text > h4 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.blog-details-text > p {
+  color: #121212;
+  font-size: 15px;
+  line-height: 28px;
+  padding-right: 100px;
+}
+p.blog-details-para {
+  margin-top: 30px;
+  margin-bottom:0;
+}
+blockquote {
+  background: #f1f1f1 none repeat scroll 0 0;
+  border-left: 4px solid #0083f3;
+  margin: 40px 0;
+  padding: 50px 55px;
+}
+blockquote > p {
+  color: #0083f3;
+  font-size: 18px;
+  font-style: italic;
+  position:relative;
+}
+blockquote p::before {
+  content: "";
+  font-family: FontAwesome;
+  left: -24px;
+  position: absolute;
+  top: -12px;
+}
+.blog-details-icon ul li {
+  display: inline-block;
+  margin-right: 15px;
+}
+.blog-details-icon a {
+  color: #797979;
+  font-size: 16px;
+}
+.blog-details-icon ul li a i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+h3.comment-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+.author-comment-info {
+  padding-right: 100px;
+}
+.single-comment {
+  overflow: hidden;
+}
+.author-img {
+  float: left;
+  padding-right: 20px;
+}
+.author-comment-info > h4 {
+  color: #121212;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+.author-comment-info > span {
+  font-style: italic;
+}
+.author-comment-info > p {
+  margin-bottom: 10px;
+}
+h4.details-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+.comment-form input {
+  background: #fff none repeat scroll 0 0;
+  border: 1px solid #ccc;
+  color: #121212;
+  height: 45px;
+}
+.comment-form textarea {
+  background: #fff none repeat scroll 0 0;
+  border: 1px solid #ccc;
+  height: 240px;
+}
+.new-comment-post button.comment-btn {
+  background: #0083f3 none repeat scroll 0 0;
+  border: 1px solid #0083f3;
+  border-radius: 3px;
+  color: #fff;
+  display: inline-block;
+  font-size: 15px;
+  padding: 8px 10px;
+  text-transform: uppercase;	
+  transition:all .4s;
+}
+.new-comment-post button.comment-btn:hover{
+  background: #fff none repeat scroll 0 0;
+  color:#0083f3; 
+}
+.masonry-video-btn {
+  top: 33%;
+}
+.masonry-video-btn .play-btn {
+  font-size: 44px;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+  width: 70px;
+}
+
+.masonry-music{
+	width:100%;
+	height:180px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

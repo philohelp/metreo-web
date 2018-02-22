@@ -1,0 +1,80 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Get-touch style file. All Get-touch related style included in this file.
+
+--------------------------------------*/
+.section-title > h2 {
+  color: #121212;
+  display: inline-block;
+  font-size: 30px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  position: relative;
+  text-transform:uppercase;
+}
+.section-title > h2::before {
+  background: #0083f3 none repeat scroll 0 0;
+  bottom: 0;
+  content: "";
+  height: 2px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 65px;
+}
+.section-title > p {
+  color: #121212;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 28px;
+  margin-bottom: 40px;
+}
+
+
+.download-btn {
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+.download-btn li {
+  display: inline-block;
+  margin: 0 52px;
+}
+.download-btn li a {
+  background: #333132 none repeat scroll 0 0;
+  border-radius: 6px;
+  display: block;
+  padding: 7px 20px 7px 0;
+  position: relative;
+  text-align: left;
+  transition: all 0.3s ease-in-out 0s;
+}
+.download-btn li a:hover {
+  background: #0083f3 none repeat scroll 0 0;
+  box-shadow: 0 1px 2px #333333;
+}
+.download-btn li a .icon {
+  color: #ffffff;
+  display: block;
+  font-size: 45px;
+  left: 22px;
+  position: absolute;
+  top: 2px;
+}
+.download-btn li a .small {
+  color: #ffffff;
+  font-size: 15px;
+}
+.download-btn li a .big {
+  color: #ffffff;
+  font-size: 25px;
+  line-height: 32px;
+  text-transform: capitalize;
+}
+.download-btn li a .small, .download-btn li a .big {
+  display: block;
+  padding-left: 85px;
+}

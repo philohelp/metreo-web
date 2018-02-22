@@ -1,0 +1,80 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Team style file. All Team related style included in this file.
+
+--------------------------------------*/
+
+.single-team{
+	position:relative;
+	overflow:hidden;
+	transition:all .4s;
+}
+.single-team:hover{
+  box-shadow: 0 1px 3px #999999;
+}
+
+.team-img > a {
+  display: inline-block;
+  position: relative;
+}
+.team-img  a::after {
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 111;
+  background:#0083f3;
+  opacity:0;
+  transition:all .4s;
+}
+.single-team:hover .team-img  a::after{
+	opacity:.6;
+}
+.team-img > a::before {
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  content: "";
+  font-family: Material-Design-Iconic-Font;
+  font-size: 30px;
+  height: 45px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 43%;
+  width: 45px;
+  transform:scale(4);
+  opacity:0;
+  transition:all .4s;
+  z-index:11;
+}
+.single-team:hover .team-img > a::before{
+	opacity:1;
+	transform:scale(1);
+	z-index:11111;  
+} 
+.team-info.mt-20 {
+  padding: 0 0 20px 20px;
+}
+.team-info h4{
+	font-weight:700;
+}
+.team-info > span {
+  font-size: 15px;
+}
+
+.social-icon a {
+  border: 1px solid #0083f3;
+  display: inline-block;
+  font-size: 15px;
+  height: 25px;
+  margin-right: 5px;
+  text-align: center;
+  width: 25px;
+  color:#0083f3;
+}

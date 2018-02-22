@@ -1,0 +1,74 @@
+/* -----------------------------------
+Template:  Theme Name
+
+NOTE: This is Feature style file. All Feature related style included in this file.
+
+--------------------------------------*/
+.feature-awesome-icon {
+  border: 1px solid #121212;
+  border-radius: 50%;
+  float: left;
+  font-size: 35px;
+  height: 60px;
+  line-height: 60px;
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  transition:all .4s;
+}
+.single-awesome-feature-text {
+  padding-left: 80px;
+}
+.single-awesome-feature-text h4 {
+  color: #121212;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+}
+.single-awesome-feature-text {
+  padding-left: 80px;
+}
+.single-awesome-feature-text > p {
+  line-height: 25px;
+  margin-bottom: 0;
+}
+.single-awesome-feature {
+  margin-bottom: 50px;
+}   
+.awesome-feature-img {
+  margin-top: 40px;
+}
+.single-awesome-feature:hover .feature-awesome-icon{
+	background:#0083f3;
+	color:#fff;
+	border: 1px solid #fff;
+}
+.single-awesome-feature:last-child {
+  margin-bottom: 0;
+}
+
+
+/* creative-feature-area */
+.single-creative-feature {
+  line-height: 0;
+  margin-bottom: 55px;
+  text-align: right;
+}
+.single-creative-feature:hover .creative-feature-icon{
+	color:#0083f3;
+}
+.creative-feature-icon {
+    font-size: 50px;
+    margin-bottom: 20px;
+	transition:all .4s;
+}
+.creative-feature-text > h4 {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+.creative-feature-text > p {
+  line-height: 25px;
+  margin:0;
+}
+.feature-text-right{
+	text-align:left;
+}
