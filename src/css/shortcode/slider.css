@@ -87,6 +87,11 @@ a.white-btn {
   background: #ffffff none repeat scroll 0 0;
   color: #333333;
 }
+
+a.white-btn {
+  background: #753a3a none repeat scroll 0 0;
+  color: #333333;
+}
 /*----------------
   Home-2
 ----------------- */
@@ -181,6 +186,12 @@ a.defult-btn{
 a.white-btn {
   background: #ffffff none repeat scroll 0 0;
   color: #333333;
+  margin-left: 0;
+}
+
+a.connect-btn {
+  background: #5fa0a3 none repeat scroll 0 0;
+  color: #fff;
   margin-left: 0;
 }
 
