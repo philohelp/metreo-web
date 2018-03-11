@@ -190,9 +190,10 @@ a.white-btn {
 }
 
 a.connect-btn {
-  background: #5fa0a3 none repeat scroll 0 0;
-  color: #fff;
+  background: #fff none repeat scroll 0 0;
+  color: #333333;
   margin-left: 0;
+  cursor: pointer;
 }
 
 

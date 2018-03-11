@@ -1,5 +1,7 @@
 import React from 'react';
 // import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import withAuthorization from './withAuthorization';
+
 import {
   NavItem,
   NavLink
@@ -9,9 +11,13 @@ import { Link } from 'react-router-dom';
 
 const Home = () =>
   <div>
+    <h1><p>The Home Page is accessible by every signed in user.</p></h1>
     <Link to={routes.ACCOUNT} className="menu-items" style={{ textDecoration: "none", color: "#333" }}>
       Paramètres
             </Link>
   </div>
 
-export default Home;
+
+const authCondition = (authUser) => !!authUser;
+
+export default withAuthorization(authCondition)(Home);
