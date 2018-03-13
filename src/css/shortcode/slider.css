@@ -174,11 +174,13 @@ a.defult-btn{
   padding: 9px 15px;
   text-transform: uppercase;
   text-decoration: none;
+  cursor:pointer;
 }
 .cap-readmore-5 a:hover{
 	background:#fff;
   color:#121212;
   text-decoration: none;
+  cursor:pointer;
 }
 .defult-btn.text-white {
   color: #fff;

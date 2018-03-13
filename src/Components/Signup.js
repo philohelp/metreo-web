@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { auth } from './../firebase';
-import {
-  Row,
-  Col,
-  Button
-} from "reactstrap";
+
+import { Grid, Button } from 'semantic-ui-react'
 
 import * as routes from './../constants/routes';
 
 const SignUp = ({ history }) =>
-  <Row style={{ marginTop: 200 }}>
-    <Col lg={{ size: 6, offset: 3 }} md={{ size: 6, offset: 1 }} sm="12" xs="12">
-      <h1 style={{ marginBottom: 20 }}>S'enregistrer</h1>
+  <Grid centered>
+    <Grid.Column mobile={16} tablet={8} computer={6}>
+      <h1 style={{ marginTop: 100, marginBottom: 20 }}>S'enregistrer</h1>
       <SignUpForm history={history} />
-    </Col>
-  </Row>
+    </Grid.Column>
+  </Grid>
 
 const INITIAL_STATE = {
   username: '',
@@ -37,7 +34,7 @@ class SignUpForm extends Component {
 
   onSubmit = (event) => {
     const {
-      username,
+      // username,
       email,
       passwordOne,
     } = this.state;

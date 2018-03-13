@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -11,7 +11,7 @@ import Home from './Home';
 import Account from './Account';
 import Navigation from "./Navigation";
 
-import { firebase } from '../firebase';
+// import { firebase } from '../firebase';
 import withAuthentication from './withAuthentication';
 import * as routes from './../constants/routes';
 

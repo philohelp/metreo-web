@@ -3,23 +3,22 @@ import { withRouter } from 'react-router-dom';
 
 import { SignUpLink } from './Signup';
 import { auth } from '../firebase';
-import {
-  Row,
-  Col,
-  Button
-} from "reactstrap";
+
+import { Grid, Button } from 'semantic-ui-react'
 import * as routes from '../constants/routes';
 import { PasswordForgetLink } from './Forgetpassword';
 
 const SignIn = ({ history }) =>
-  <Row style={{ marginTop: 200 }}>
-    <Col lg={{ size: 6, offset: 3 }} md={{ size: 6, offset: 1 }} sm="12" xs="12">
-      <h1 style={{ marginBottom: 20 }}>Se connecter</h1>
+  <Grid centered>
+    <Grid.Column mobile={16} tablet={8} computer={6}>
+      <h1 style={{ marginTop: 100, marginBottom: 20 }}>Se connecter</h1>
       <SignInForm history={history} />
-      <PasswordForgetLink />
-      <SignUpLink />
-    </Col>
-  </Row>
+      <div style={{ marginTop: 20 }}>
+        <PasswordForgetLink />
+        <SignUpLink />
+      </div>
+    </Grid.Column>
+  </Grid>
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,

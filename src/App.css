@@ -2,10 +2,23 @@
 
 .bigCont {
   font-family: 'Lato', sans-serif;
+  font-size:14px;
+}
+
+.csv-input {
+  height: 40px;
+  padding:5px;
+  margin-bottom:100px;
 }
 
 .App-logo {
   height: 44px;
+}
+
+.cell-edit{
+  background-color: #a8ceb7;
+  font-size:14px;
+
 }
 
 .menu-items{
@@ -41,7 +54,9 @@ margin: 0;
 padding: 0
 }
 .clear{clear:both}
-body {}
+body {
+  font-size:14px
+}
 ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;

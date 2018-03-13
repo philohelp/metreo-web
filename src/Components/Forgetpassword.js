@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Row,
-  Col,
-  Button
-} from "reactstrap";
+import { Grid, Button } from 'semantic-ui-react'
 
 import { auth } from '../firebase';
 
 const ForgetPassword = () =>
-  <Row style={{ marginTop: 200 }}>
-    <Col lg={{ size: 6, offset: 3 }} md={{ size: 6, offset: 1 }} sm="12" xs="12">
-      <h1 style={{ marginBottom: 20 }}>Mot de passe oublié</h1>
-      <PasswordForgetForm />
-    </Col>
-  </Row>
+  <Grid columns={3} divided>
+    <Grid.Row style={{ marginTop: 200 }}>
+      <Grid.Column lg={{ size: 6, offset: 3 }} md={{ size: 6, offset: 1 }} sm="12" xs="12">
+        <h1 style={{ marginBottom: 20 }}>Mot de passe oublié</h1>
+        <PasswordForgetForm />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
 
 
 const byPropKey = (propertyName, value) => () => ({

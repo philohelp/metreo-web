@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 
 import { auth } from '../firebase';
 
-import {
-    Button
-} from "reactstrap";
+import { Button } from 'semantic-ui-react'
 
 const byPropKey = (propertyName, value) => () => ({
     [propertyName]: value,

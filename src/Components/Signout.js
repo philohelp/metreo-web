@@ -1,16 +1,14 @@
 import React from 'react';
-import {
-    NavItem,
-    NavLink
-} from 'reactstrap';
 
 import { auth } from './../firebase';
 
+import { Menu } from 'semantic-ui-react';
+
 const SignOutButton = () =>
-    <NavItem>
+    <Menu.Item>
         <div className="cap-readmore-5">
-            <NavLink onClick={auth.doSignOut} >Se déconnecter</NavLink>
+            <div onClick={auth.doSignOut} style={{ fontSize: 14 }}>Se déconnecter</div>
         </div>
-    </NavItem>
+    </Menu.Item>
 
 export default SignOutButton;
