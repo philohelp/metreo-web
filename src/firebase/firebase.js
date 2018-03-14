@@ -1,4 +1,7 @@
-import * as firebase from 'firebase';
+const firebase = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
+
 
 const config = {
     apiKey: "AIzaSyBRXM1lugsdV-ZimreIfjJlEEPVc-__gQo",
@@ -14,7 +17,9 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 export {
     auth,
+    db
 };

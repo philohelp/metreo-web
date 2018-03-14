@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { auth } from './../firebase';
-
+import { auth, db } from './../firebase';
 import { Grid, Button } from 'semantic-ui-react'
 
 import * as routes from './../constants/routes';
+
+const firebase = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
 
 const SignUp = ({ history }) =>
   <Grid centered>
@@ -34,7 +37,7 @@ class SignUpForm extends Component {
 
   onSubmit = (event) => {
     const {
-      // username,
+      username,
       email,
       passwordOne,
     } = this.state;
@@ -43,17 +46,24 @@ class SignUpForm extends Component {
       history,
     } = this.props;
 
-    auth.doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routes.HOME);
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error));
-      });
+    const matter = "Philosophie"
 
-    event.preventDefault();
-  }
+    auth.doCreateUserWithEmailAndPassword(email, passwordOne)
+    .then(authUser => {
+      console.log(authUser)
+      db.setDefaultUserIfEmpty(authUser, matter, username);
+      db.fillEvals()
+      db.fillComments()
+      this.setState(() => ({ ...INITIAL_STATE }));
+      history.push(routes.HOME);
+    })
+    .catch(error => {
+      this.setState(byPropKey('error', error));
+      console.log(error)
+    });
+
+  event.preventDefault();
+}
 
   render() {
     const {
@@ -121,3 +131,18 @@ export {
   SignUpForm,
   SignUpLink,
 };
+
+
+/*
+var user = firebase.auth().currentUser;
+
+console.log(user)
+
+user.updateProfile({
+  displayName: username
+}).then(function() {
+  console.log("cool")
+}).catch(function(error) {
+  console.log(error)
+});
+*/
