@@ -1,4 +1,3 @@
-  
 const variables = {
   brandPrimary: '#5fa0a3',
   brandInfo: '#546E7A',

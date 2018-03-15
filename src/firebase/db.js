@@ -1,21 +1,55 @@
 import { db, auth } from "./firebase";
 
-// User API
+export const topicsRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  console.log("from db", uid)
+  return db.collection("users").doc(uid).collection("topics");
+}
+
+export const papersRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  return db.collection("users").doc(uid).collection("papers");
+}
+
+export const pilesRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  return db.collection("users").doc(uid).collection("piles");
+}
+
+export const evalsRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  return db.collection("users").doc(uid).collection("evals");
+}
+
+export const commentsRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  return db.collection("users").doc(uid).collection("comments");
+}
+
+export const studentsRef = () => {
+  const user = auth.currentUser;
+  const { uid } = user;
+  return db.collection("users").doc(uid).collection("students");
+}
 
 const DEFAULT_USER = (name, matter) => ({
-    profile: {
-        name,
-        matter,
-        "birthday": 519948000000,
-        "emailNotifications": true,
-        "phoneNotifications": true
-    }
+  profile: {
+    name,
+    matter,
+    "birthday": 519948000000,
+    "emailNotifications": true,
+    "phoneNotifications": true
+  }
 });
 
-export {DEFAULT_USER};
+export { DEFAULT_USER };
 
 export const setDefaultUserIfEmpty = (user, matter, username) => {
-  let container = [];
   const { uid } = user;
   db.collection("users").doc(uid).get().then(doc => {
     if (!doc.exists) {

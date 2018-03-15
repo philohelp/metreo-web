@@ -33,7 +33,7 @@ const NavigationAuth = () =>
             <Menu.Item className="menu-items" name='Projet' href="/#project" />
             <Menu.Item className="menu-items" name='Caractéristiques' href="/#features" />
             <Menu.Item className="menu-items" name='Infos légales' href="/#personnal" />
-            <Menu.Item className="menu-items" name='Mon espace' href="/Home" >
+            <Menu.Item className="menu-items" name='Mon espace' href="/mon-metreo" >
                 <Label color='teal' size='huge'>Mon espace</Label>
             </Menu.Item>
             <Menu.Item>
