@@ -1,40 +1,67 @@
 import { db, auth } from "./firebase";
+const firebase = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
 
 export const topicsRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  console.log("from db", uid)
-  return db.collection("users").doc(uid).collection("topics");
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("topics");
+  }
 }
 
 export const papersRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  return db.collection("users").doc(uid).collection("papers");
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("papers");
+  }
 }
 
 export const pilesRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  return db.collection("users").doc(uid).collection("piles");
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("piles");
+  }
 }
 
 export const evalsRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  return db.collection("users").doc(uid).collection("evals");
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("evals");
+  }
 }
 
 export const commentsRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  return db.collection("users").doc(uid).collection("comments");
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("comments");
+  }
 }
 
 export const studentsRef = () => {
   const user = auth.currentUser;
-  const { uid } = user;
-  return db.collection("users").doc(uid).collection("students");
+  console.log("from db", user)
+  if (user == null) {
+    return null
+  } else if (user != null) {
+    const { uid } = user;
+    return db.collection("users").doc(uid).collection("students");
+  }
 }
 
 const DEFAULT_USER = (name, matter) => ({

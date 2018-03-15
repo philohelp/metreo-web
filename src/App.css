@@ -18,7 +18,10 @@
 .cell-edit{
   /* background-color: #a8ceb7; */
   font-size:14px;
+}
 
+.custom-row-class{
+  font-size:14px;
 }
 
 .menu-items{

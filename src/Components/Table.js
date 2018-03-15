@@ -12,6 +12,8 @@ const Table = (props) => {
         errorMessage: props.errorMessage,
     });
 
+    const rowClasses = 'custom-row-class';
+
     return (
         <BootstrapTable
             remote={{ cellEdit: true }}
@@ -20,6 +22,7 @@ const Table = (props) => {
             columns={props.columns}
             cellEdit={cellEdit}
             onTableChange={props.onTableChange}
+            rowClasses={rowClasses}
         />
     )
 }

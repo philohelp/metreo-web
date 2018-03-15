@@ -95,11 +95,13 @@ class EditComs extends React.Component {
                 text: 'Nom',
                 editable: false,
                 editCellClasses: 'cell-edit',
+                sort: true
             },
             {
                 dataField: 'txt',
                 text: 'Texte',
                 editCellClasses: 'cell-edit',
+                sort: true
             },
             {
                 dataField: 'hidden',

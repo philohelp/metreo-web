@@ -5,39 +5,41 @@ import { topicsRef } from './../firebase/db';
 
 import { Grid, Message, Button, Icon } from 'semantic-ui-react';
 
+const data = [{ id: "1", exerctype: "bla", authname: "bli", title: "blu", edit: "blo" }, { id: "2", exerctype: "blap", authname: "blim blim", title: "bludde", edit: "blousd" }]
+
 class EditTopics extends React.Component {
     constructor(props) {
         super(props);
         this.myref = topicsRef();
         this.state = {
-            data: [],
+            data: data,
             errorMessage: null,
             hiddenNeg: true,
             hiddenPos: true,
         };
     }
 
-    async componentWillMount() {
-        let data = [];
-        let newdoc = {};
-        const { myref } = this;
-        await myref.get()
-            .then(snapshot => {
-                snapshot.forEach(doc => {
-                    newdoc = doc.data();
-                    newdoc.id = doc.id;
-                    newdoc.edit = "truc";
-                    data.push(newdoc);
-                });
-                this.setState({
-                    data
-                });
-                console.log("Docs have arrived", data[0])
-            })
-            .catch(err => {
-                console.log('Error getting documents', err)
-            });
-    }
+    // async componentWillMount() {
+    //     let data = [];
+    //     let newdoc = {};
+    //     const { myref } = this;
+    //     await myref.get()
+    //         .then(snapshot => {
+    //             snapshot.forEach(doc => {
+    //                 newdoc = doc.data();
+    //                 newdoc.id = doc.id;
+    //                 newdoc.edit = "truc";
+    //                 data.push(newdoc);
+    //             });
+    //             this.setState({
+    //                 data
+    //             });
+    //             console.log("Docs have arrived", data[0])
+    //         })
+    //         .catch(err => {
+    //             console.log('Error getting documents', err)
+    //         });
+    // }
 
     handleTableChange = (type, { data, cellEdit: { rowId, dataField, newValue } }) => {
         const result = data.map((row) => {
@@ -63,6 +65,14 @@ class EditTopics extends React.Component {
             });
     }
 
+    addMe = () => {
+        let { data } = this.state;
+        const id = `aaa${data.length + 1}`;
+        const newDoc = { id, exerctype: "[Nouvelle entrée]", authname: "[Nouvelle entrée]", title: "[Nouvelle entrée]", edit: "[Nouvelle entrée]" }
+        data.push(newDoc)
+        this.setState({ data })
+    }
+
     deleteMe = (rowIndex) => {
         console.log(rowIndex)
         const { data } = this.state;
@@ -82,12 +92,12 @@ class EditTopics extends React.Component {
 
     render() {
         const { data, hiddenNeg, hiddenPos, errorMessage } = this.state;
-        const { deleteMe, handleTableChange, deleteFormatter, selectRow } = this;
+        const { deleteMe, handleTableChange, deleteFormatter } = this;
         const columns = [{
             dataField: 'exerctype',
             text: 'Type',
             editCellClasses: 'cell-edit',
-            // hidden: true
+            hidden: true
         },
         {
             dataField: 'authname',
@@ -98,7 +108,8 @@ class EditTopics extends React.Component {
         {
             dataField: 'title',
             text: 'Titre',
-            editCellClasses: 'cell-edit'
+            editCellClasses: 'cell-edit',
+            sort: true
         },
         {
             dataField: 'edit',
@@ -126,6 +137,10 @@ class EditTopics extends React.Component {
                                     <h1 style={{ marginTop: 50, marginBottom: 20 }}>Éditez vos sujets</h1>
                                     <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between" }} >
                                         Vous pouvez cliquer sur chaque information pour la modifier.
+                                    <Button attached="top" color='vk' onClick={this.addMe} style={{ alignSelf: "flex-end" }}>
+                                            <Icon name='add' />
+                                            Ajouter
+                                    </Button>
                                     </div>
                                     <Table
                                         data={data}
