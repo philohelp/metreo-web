@@ -5,7 +5,7 @@ import { Grid, Message, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
 
-    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addNew, deleteMe, handleTableChange, data } = props;
+    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addNew, fbAdd, deleteMe, handleTableChange, data, currentlyAdding } = props;
     const { title, columns } = editConfig;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
         const { deleteMe } = props;
@@ -48,6 +48,15 @@ const Edit = (props) => {
                                         <Icon name='add' />
                                         Ajouter
                                     </Button>
+                                    {
+                                        currentlyAdding.length !== 0 ?
+                                            <Button attached="top" color='vk' onClick={fbAdd} style={{ alignSelf: "flex-end" }}>
+                                                <Icon name='add' />
+                                                Sauvegarder
+                                    </Button>
+                                            :
+                                            null
+                                    }
                                 </div>
                                 <Table
                                     data={data}

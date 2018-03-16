@@ -22,7 +22,7 @@ class Home extends React.Component {
       evals: [],
       comments: [],
       topics: [],
-      currentlyAdding: false
+      currentlyAdding: []
     };
   }
 
@@ -101,12 +101,18 @@ class Home extends React.Component {
     }
   };
 
+  getRandomInt() {
+    return Math.floor(Math.random() * Math.floor(1000));
+  }
+
   addNew = () => {
-    let { data } = this.state;
-    const id = `aaa${data.length + 1}`;
-    const newDoc = { id, exerctype: "[Nouvelle entrée]", authname: "[Nouvelle entrée]", title: "[Nouvelle entrée]", edit: "[Nouvelle entrée]" }
+    let { data, currentlyAdding } = this.state;
+    const random = this.getRandomInt()
+    const id = `new${data.length + 1}-${random}`;
+    const newDoc = { id }
     data.push(newDoc)
-    this.setState({ currentlyAdding: true })
+    currentlyAdding.push(newDoc)
+    this.setState({ currentlyAdding })
     this.updateState(data)
   }
 
@@ -123,6 +129,7 @@ class Home extends React.Component {
       if (row.id === rowId) {
         const newRow = { ...row };
         newRow[dataField] = newValue;
+        console.log("handlechange with", newRow)
         this.fbEdit(rowId, newRow)
         return newRow;
       }
@@ -153,21 +160,31 @@ class Home extends React.Component {
 
   async fbEdit(rowId, newValue) {
     const uid = auth.currentUser.uid;
-    const { activeItem, currentlyAdding } = this.state;
-    if (currentlyAdding === true) {
-      await db.collection("users").doc(uid).collection(activeItem).add(newValue)
-        .then(ref => {
-          this.setState({ currentlyAdding: false })
-          const added = this.state.currentlyAdding
-          console.log("Élément ajouté !", rowId, newValue, added);
-        });
-    } else if (currentlyAdding === false) {
+    const { activeItem } = this.state;
+    if (rowId.length === 20) {
       await db.collection("users").doc(uid).collection(activeItem).doc(rowId).set(newValue)
         .then(ref => {
           console.log("Élément modifié !", rowId, newValue);
         });
+    } else {
+      console.log("rejecting", newValue)
+      return
     }
+  }
 
+  fbAdd = () => {
+    const uid = auth.currentUser.uid;
+    const { activeItem, currentlyAdding, data } = this.state;
+    console.log(currentlyAdding, data)
+    currentlyAdding.forEach(newRow => {
+      const newValue = data.find(row => row.id === newRow.id)
+      console.log(newValue)
+      // db.collection("users").doc(uid).collection(activeItem).add(newValue)
+      //   .then(ref => {
+      //     console.log("Élément ajouté !", newValue);
+      //   });
+    })
+    this.setState({ currentlyAdding: [] })
   }
 
   async fbRemove(rowId) {
@@ -180,8 +197,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data } = this.state;
-    const { handleTableChange, deleteMe, addNew } = this;
+    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding } = this.state;
+    const { handleTableChange, deleteMe, addNew, fbAdd } = this;
     return (
       <Grid centered style={{ marginTop: 20 }}>
         <Grid.Column computer={14}>
@@ -230,7 +247,7 @@ class Home extends React.Component {
                     Hello mes infos
                             </div>
                   :
-                  <Edit editConfig={editConfig} addNew={addNew} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} />
+                  <Edit editConfig={editConfig} addNew={addNew} fbAdd={fbAdd} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} currentlyAdding={currentlyAdding} />
             }
           </div>
         </Grid.Column>
