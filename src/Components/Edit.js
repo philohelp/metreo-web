@@ -5,12 +5,13 @@ import { Grid, Message, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
 
-    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addMe, deleteMe, handleTableChange, data } = props;
+    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addNew, deleteMe, handleTableChange, data } = props;
     const { title, columns } = editConfig;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
         const { deleteMe } = props;
+        const rowId = row.id;
         return (
-            <Button icon labelPosition='left' onClick={() => deleteMe(rowIndex)}>
+            <Button icon labelPosition='left' onClick={() => deleteMe(rowIndex, rowId)}>
                 <Icon name='remove' />
                 Enlever
             </Button>
@@ -43,7 +44,7 @@ const Edit = (props) => {
                                 <h1 style={{ marginTop: 50, marginBottom: 20 }}>Éditez vos {title}</h1>
                                 <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between" }} >
                                     Vous pouvez cliquer sur chaque information pour la modifier.
-                                    <Button attached="top" color='vk' onClick={addMe} style={{ alignSelf: "flex-end" }}>
+                                    <Button attached="top" color='vk' onClick={addNew} style={{ alignSelf: "flex-end" }}>
                                         <Icon name='add' />
                                         Ajouter
                                     </Button>

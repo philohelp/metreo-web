@@ -21,7 +21,8 @@ class Home extends React.Component {
       students: [],
       evals: [],
       comments: [],
-      topics: []
+      topics: [],
+      currentlyAdding: false
     };
   }
 
@@ -82,94 +83,132 @@ class Home extends React.Component {
 
   handleItemClick = (e, { name }) => {
     const { students, evals, comments, topics } = this.state
-    this.setState({ activeItem: name })
     switch (name) {
+      case "Élèves":
+        return this.setState({ activeItem: "addgroup" })
       case "Classes":
-        this.setState({ editConfig: studentsEdit, data: students })
-        break;
+        return this.setState({ editConfig: studentsEdit, data: students, activeItem: "students" })
       case "Évaluations":
-        this.setState({ editConfig: evalsEdit, data: evals })
-        break;
+        return this.setState({ editConfig: evalsEdit, data: evals, activeItem: "evals" })
       case "Remarques":
-        this.setState({ editConfig: commentsEdit, data: comments })
-        break;
+        return this.setState({ editConfig: commentsEdit, data: comments, activeItem: "comments" })
       case "Sujets":
-        this.setState({ editConfig: topicsEdit, data: topics })
-        break;
+        return this.setState({ editConfig: topicsEdit, data: topics, activeItem: "topics" })
+      case "Mes infos":
+        return this.setState({ activeItem: "infos" })
       default:
         return
     }
   };
 
-  handleTableChange = (type, { data, cellEdit: { rowId, dataField, newValue } }) => {
-    const result = data.map((row) => {
-      if (row.id === rowId) {
-        const newRow = { ...row };
-        newRow[dataField] = newValue;
-        // this.sendToFb(rowId, newRow)
-        return newRow;
-      }
-      return row;
-    });
-    this.setState(() => ({
-      data: result,
-      errorMessage: null
-    }));
-  }
-
-  async sendToFb(rowId, newValue) {
-    const myref = this.myref;
-    await myref.doc(rowId).set(newValue)
-      .then(ref => {
-        console.log("Sujet modifié !", rowId, newValue);
-      });
-  }
-
-  addMe = () => {
+  addNew = () => {
     let { data } = this.state;
     const id = `aaa${data.length + 1}`;
     const newDoc = { id, exerctype: "[Nouvelle entrée]", authname: "[Nouvelle entrée]", title: "[Nouvelle entrée]", edit: "[Nouvelle entrée]" }
     data.push(newDoc)
-    this.setState({ data })
+    this.setState({ currentlyAdding: true })
+    this.updateState(data)
   }
 
-  deleteMe = (rowIndex) => {
+  deleteMe = (rowIndex, rowId) => {
     console.log(rowIndex)
     const { data } = this.state;
     data.splice(rowIndex, 1)
-    this.setState({ data });
+    this.updateState(data)
+    this.fbRemove(rowId)
+  }
+
+  handleTableChange = (type, { data, cellEdit: { rowId, dataField, newValue } }) => {
+    const newData = data.map((row) => {
+      if (row.id === rowId) {
+        const newRow = { ...row };
+        newRow[dataField] = newValue;
+        this.fbEdit(rowId, newRow)
+        return newRow;
+      }
+      return row;
+    });
+    this.updateState(newData)
+  }
+
+  updateState(newData) {
+    const { activeItem } = this.state;
+    this.setState(() => ({
+      data: newData,
+      errorMessage: null
+    }));
+    switch (activeItem) {
+      case "students":
+        return this.setState({ students: newData })
+      case "evals":
+        return this.setState({ evals: newData })
+      case "comments":
+        return this.setState({ comments: newData })
+      case "topics":
+        return this.setState({ topics: newData })
+      default:
+        return
+    }
+  }
+
+  async fbEdit(rowId, newValue) {
+    const uid = auth.currentUser.uid;
+    const { activeItem, currentlyAdding } = this.state;
+    if (currentlyAdding === true) {
+      await db.collection("users").doc(uid).collection(activeItem).add(newValue)
+        .then(ref => {
+          this.setState({ currentlyAdding: false })
+          const added = this.state.currentlyAdding
+          console.log("Élément ajouté !", rowId, newValue, added);
+        });
+    } else if (currentlyAdding === false) {
+      await db.collection("users").doc(uid).collection(activeItem).doc(rowId).set(newValue)
+        .then(ref => {
+          console.log("Élément modifié !", rowId, newValue);
+        });
+    }
+
+  }
+
+  async fbRemove(rowId) {
+    const uid = auth.currentUser.uid;
+    const { activeItem } = this.state;
+    await db.collection("users").doc(uid).collection(activeItem).doc(rowId).delete()
+      .then(ref => {
+        console.log("Élément supprimé !", rowId);
+      });
   }
 
   render() {
     const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data } = this.state;
-    const { handleTableChange, deleteMe, addMe } = this;
+    const { handleTableChange, deleteMe, addNew } = this;
     return (
       <Grid centered style={{ marginTop: 20 }}>
         <Grid.Column computer={14}>
           <Menu pointing size="huge" stackable>
             <Menu.Item
               name="Élèves"
-              active={activeItem === "Élèves"}
+              active={activeItem === "addgroup"}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Classes"
-              active={activeItem === "Classes"}
+              active={activeItem === "students"}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Évaluations"
-              active={activeItem === "Évaluations"}
+              active={activeItem === "evals"}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Remarques"
-              active={activeItem === "Remarques"}
+              active={activeItem === "comments"}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Sujets"
-              active={activeItem === "Sujets"}
+              active={activeItem === "topics"}
               onClick={this.handleItemClick}
             />
             <Menu.Menu
@@ -177,7 +216,7 @@ class Home extends React.Component {
             >
               <Menu.Item
                 name="Mes infos"
-                active={activeItem === "Mes infos"}
+                active={activeItem === "infos"}
                 onClick={this.handleItemClick}
               />
             </Menu.Menu>
@@ -191,7 +230,7 @@ class Home extends React.Component {
                     Hello mes infos
                             </div>
                   :
-                  <Edit editConfig={editConfig} addMe={addMe} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} />
+                  <Edit editConfig={editConfig} addNew={addNew} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} />
             }
           </div>
         </Grid.Column>
