@@ -4,13 +4,8 @@ import withAuthorization from "./withAuthorization";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 
 import AddGroup from "./AddGroup";
-import EditStudents from "./EditStudents";
-import EditEvals from "./EditEvals";
-import EditComs from "./EditComs";
-
 import Edit from "./Edit";
 import { studentsEdit, evalsEdit, commentsEdit, topicsEdit } from './../constants/edition';
-import { evalsRef } from './../firebase/db';
 import { db, auth } from './../firebase/firebase';
 
 class Home extends React.Component {
@@ -18,54 +13,88 @@ class Home extends React.Component {
     super(props);
     this.state = {
       activeItem: "Élèves",
-      editFields: {},
+      editConfig: {},
       data: [],
       errorMessage: null,
       hiddenNeg: true,
-      hiddenPos: true
+      hiddenPos: true,
+      students: [],
+      evals: [],
+      comments: [],
+      topics: []
     };
   }
 
-  async loadData(collection) {
-    let data = [];
-    let newdoc = {};
+  async componentWillMount() {
     const uid = auth.currentUser.uid;
-    await db.collection("users").doc(uid).collection(collection).get()
+    await db.collection("users").doc(uid).collection("students").get()
       .then(snapshot => {
-        snapshot.forEach(doc => {
-          newdoc = doc.data();
-          newdoc.id = doc.id;
-          newdoc.edit = "truc";
-          data.push(newdoc);
-        });
-        this.setState({
-          data
-        });
-        console.log("Docs have arrived", data[0])
+        this.addSnapshotToState(snapshot, "students")
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      });
+    await db.collection("users").doc(uid).collection("evals").get()
+      .then(snapshot => {
+        this.addSnapshotToState(snapshot, "evals")
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      });
+    await db.collection("users").doc(uid).collection("comments").get()
+      .then(snapshot => {
+        this.addSnapshotToState(snapshot, "comments")
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      });
+    await db.collection("users").doc(uid).collection("topics").get()
+      .then(snapshot => {
+        this.addSnapshotToState(snapshot, "topics")
       })
       .catch(err => {
         console.log('Error getting documents', err)
       });
   }
 
+  addSnapshotToState = (snapshot, whichData) => {
+    let container = []
+    let newdoc = {}
+    snapshot.forEach(doc => {
+      newdoc = doc.data();
+      newdoc.id = doc.id;
+      newdoc.edit = "truc";
+      container.push(newdoc);
+    });
+    switch (whichData) {
+      case "students":
+        return this.setState({ students: container });
+      case "evals":
+        return this.setState({ evals: container });
+      case "comments":
+        return this.setState({ comments: container });
+      case "topics":
+        return this.setState({ topics: container });
+      default:
+        return
+    }
+  }
+
   handleItemClick = (e, { name }) => {
+    const { students, evals, comments, topics } = this.state
     this.setState({ activeItem: name })
     switch (name) {
       case "Classes":
-        this.setState({ editFields: studentsEdit })
-        this.loadData("students");
+        this.setState({ editConfig: studentsEdit, data: students })
         break;
       case "Évaluations":
-        this.setState({ editFields: evalsEdit })
-        this.loadData("evals");
+        this.setState({ editConfig: evalsEdit, data: evals })
         break;
       case "Remarques":
-        this.setState({ editFields: commentsEdit })
-        this.loadData("comments");
+        this.setState({ editConfig: commentsEdit, data: comments })
         break;
       case "Sujets":
-        this.setState({ editFields: topicsEdit })
-        this.loadData("topics");
+        this.setState({ editConfig: topicsEdit, data: topics })
         break;
       default:
         return
@@ -112,7 +141,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { activeItem, editFields, hiddenNeg, hiddenPos, errorMessage, data } = this.state;
+    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data } = this.state;
     const { handleTableChange, deleteMe, addMe } = this;
     return (
       <Grid centered style={{ marginTop: 20 }}>
@@ -162,9 +191,8 @@ class Home extends React.Component {
                     Hello mes infos
                             </div>
                   :
-                  <Edit editFields={editFields} addMe={addMe} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} />
+                  <Edit editConfig={editConfig} addMe={addMe} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} />
             }
-
           </div>
         </Grid.Column>
       </Grid>

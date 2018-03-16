@@ -5,8 +5,8 @@ import { Grid, Message, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
 
-    const { hiddenNeg, hiddenPos, errorMessage, editFields, addMe, deleteMe, handleTableChange, data } = props;
-    const { title, columns } = editFields;
+    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addMe, deleteMe, handleTableChange, data } = props;
+    const { title, columns } = editConfig;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
         const { deleteMe } = props;
         return (

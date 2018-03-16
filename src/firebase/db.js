@@ -1,7 +1,4 @@
 import { db, auth } from "./firebase";
-const firebase = require("firebase");
-// Required for side-effects
-require("firebase/firestore");
 
 export const topicsRef = () => {
   const user = auth.currentUser;
@@ -55,7 +52,6 @@ export const commentsRef = () => {
 
 export const studentsRef = () => {
   const user = auth.currentUser;
-  console.log("from db", user)
   if (user == null) {
     return null
   } else if (user != null) {
