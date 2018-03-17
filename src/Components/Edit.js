@@ -23,6 +23,7 @@ const Edit = (props) => {
         text: '',
         editable: false,
         align: "center",
+        headerStyle: { width: 120 },
         formatter: deleteFormatter
     }
     ];

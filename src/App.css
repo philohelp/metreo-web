@@ -15,14 +15,58 @@
   height: 44px;
 }
 
+.ui.message{
+  font-size: 1.5em;
+}
+
+.ui.huge.menu{
+  font-size: 1rem;
+}
+
+.ui.button, .ui.buttons .button, .ui.buttons .or{
+  font-size:1.2rem
+}
+
+.form-control editor edit-text{
+  font-size:115px
+}
+
+.editor edit-text{
+  font-size:15px
+}
+
 .cell-edit{
-  /* background-color: #a8ceb7; */
   font-size:14px;
+  padding:0px;
+}
+
+.input{
+  font-size:15px;
+  padding:0px;
+}
+
+/* 
+.react-bootstrap-table-editing-cell{
+  font-size:1.5rem;
+}
+
+.form-control editor edit-text{
+  font-size:15px;
+}
+
+
+
+.form-control{
+  font-size:15px;
+}
+
+.editor{
+  font-size:15px;
 }
 
 .custom-row-class{
-  font-size:14px;
-}
+  font-size:15px;
+} */
 
 .menu-items{
   font-size:14px;
@@ -30,7 +74,7 @@
   text-transform: uppercase;
 }
 
-html, body, {height: 100%;font-family: 'Lato', sans-serif;}
+html, body, {height: 100%;font-family: 'Lato', sans-serif;font-size:2}
 .floatleft {float:left}
 .floatright {float:right}
 .alignleft {float:left;margin-right:15px;margin-bottom: 15px}

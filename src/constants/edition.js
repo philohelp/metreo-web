@@ -17,6 +17,7 @@ export const studentsEdit = {
         {
             dataField: 'group',
             text: 'Classe',
+            headerStyle: { width: 150 },
             editCellClasses: 'cell-edit'
         }
     ]
@@ -31,6 +32,7 @@ export const evalsEdit = {
             dataField: 'coeff',
             text: 'Coefficient',
             align: "center",
+            headerStyle: { width: 100 },
             editCellClasses: 'cell-edit'
         },
         {
@@ -47,6 +49,7 @@ export const evalsEdit = {
         {
             dataField: 'desc',
             text: 'Description',
+            headerStyle: { width: "50%" },
             editCellClasses: 'cell-edit',
         },
         {
@@ -83,7 +86,7 @@ export const commentsEdit = {
         },
         {
             dataField: 'evalab',
-            text: 'Nom',
+            text: 'Critère',
             editable: false,
             editCellClasses: 'cell-edit',
             sort: true
@@ -91,8 +94,9 @@ export const commentsEdit = {
         {
             dataField: 'txt',
             text: 'Texte',
+            headerStyle: { width: "60%" },
             editCellClasses: 'cell-edit',
-            sort: true
+            // sort: true
         },
         {
             dataField: 'hidden',

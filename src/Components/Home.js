@@ -7,12 +7,13 @@ import AddGroup from "./AddGroup";
 import Edit from "./Edit";
 import { studentsEdit, evalsEdit, commentsEdit, topicsEdit } from './../constants/edition';
 import { db, auth } from './../firebase/firebase';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: "Élèves",
+      activeItem: "addgroup",
       editConfig: {},
       data: [],
       errorMessage: null,
@@ -124,7 +125,9 @@ class Home extends React.Component {
     this.fbRemove(rowId)
   }
 
-  handleTableChange = (type, { data, cellEdit: { rowId, dataField, newValue } }) => {
+  handleEdit = (data, cellEdit) => {
+    const { rowId, dataField, newValue } = cellEdit;
+    console.log("arrived on handleEdit", rowId)
     const newData = data.map((row) => {
       if (row.id === rowId) {
         const newRow = { ...row };
@@ -136,6 +139,42 @@ class Home extends React.Component {
       return row;
     });
     this.updateState(newData)
+  }
+
+  handleSort = (data, sortField, sortOrder) => {
+    let result;
+    if (sortOrder === 'asc') {
+      result = data.sort((a, b) => {
+        if (a[sortField] > b[sortField]) {
+          return 1;
+        } else if (b[sortField] > a[sortField]) {
+          return -1;
+        }
+        return 0;
+      });
+    } else {
+      result = data.sort((a, b) => {
+        if (a[sortField] > b[sortField]) {
+          return -1;
+        } else if (b[sortField] > a[sortField]) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.updateState(result)
+  }
+
+  handleTableChange = (type, { ...props }) => {
+    console.log(type)
+    switch (type) {
+      case "sort":
+        return this.handleSort(props.data, props.sortField, props.sortOrder)
+      case "cellEdit":
+        return this.handleEdit(props.data, props.cellEdit)
+      default:
+        return
+    }
   }
 
   updateState(newData) {
@@ -161,6 +200,7 @@ class Home extends React.Component {
   async fbEdit(rowId, newValue) {
     const uid = auth.currentUser.uid;
     const { activeItem } = this.state;
+    console.log(rowId, newValue)
     if (rowId.length === 20) {
       await db.collection("users").doc(uid).collection(activeItem).doc(rowId).set(newValue)
         .then(ref => {
@@ -178,11 +218,10 @@ class Home extends React.Component {
     console.log(currentlyAdding, data)
     currentlyAdding.forEach(newRow => {
       const newValue = data.find(row => row.id === newRow.id)
-      console.log(newValue)
-      // db.collection("users").doc(uid).collection(activeItem).add(newValue)
-      //   .then(ref => {
-      //     console.log("Élément ajouté !", newValue);
-      //   });
+      db.collection("users").doc(uid).collection(activeItem).add(newValue)
+        .then(ref => {
+          console.log("Élément ajouté !", newValue);
+        });
     })
     this.setState({ currentlyAdding: [] })
   }
@@ -240,9 +279,9 @@ class Home extends React.Component {
           </Menu>
           <div>
             {
-              activeItem === "Élèves"
+              activeItem === "addgroup"
                 ? <Segment style={{ paddingBottom: 50 }}><AddGroup /></Segment>
-                : activeItem === "Mes infos"
+                : activeItem === "infos"
                   ? <div>
                     Hello mes infos
                             </div>

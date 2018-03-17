@@ -16,13 +16,14 @@ const Table = (props) => {
 
     return (
         <BootstrapTable
-            remote={{ cellEdit: true }}
+            remote={{ sort: true, cellEdit: true }}
             keyField="id"
             data={props.data}
             columns={props.columns}
             cellEdit={cellEdit}
             onTableChange={props.onTableChange}
             rowClasses={rowClasses}
+            printable
         />
     )
 }
