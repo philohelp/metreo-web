@@ -6,7 +6,7 @@ const GroupFilters = (props) => {
     const { filterWithBar, currentlyFilteredBy, valuesForFilterBar } = props;
     return (
         <div>
-            {valuesForFilterBar.map(value => <GButton filterWithBar={filterWithBar} value={value} key={value} currentlyFilteredBy={currentlyFilteredBy} />)}
+            {valuesForFilterBar.map((value, i=0) => <GButton filterWithBar={filterWithBar} value={value ? value : "Autre"} key={i++} currentlyFilteredBy={currentlyFilteredBy} />)}
             <Button size="small" basic={currentlyFilteredBy === "" ? false : true} onClick={() => filterWithBar("reset")}>
                 TOUS
             </Button>

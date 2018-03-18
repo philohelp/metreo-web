@@ -94,12 +94,14 @@ class Home extends React.Component {
   }
 
   deleteMe = (rowIndex, rowId) => {
-    const { data, currentlyAdding } = this.state;
+    const { data, currentlyAdding, config } = this.state;
+    const activeColl = config.collname;
+    let store = this.state.data[activeColl];
     var purged = _.remove(data, (item) => item.id === rowId);
+    var purgedStore = _.remove(store, (item) => item.id === rowId);
     this.setState({ purged })
     if (currentlyAdding.length === 0) {
       // delete op
-      this.updateStateAndStore(data)
       this.fbRemove(rowId)
       return
     } else {
@@ -229,6 +231,10 @@ class Home extends React.Component {
       const field = config.filterBar;
       const array = this.state[activeColl];
       const filtered = array.filter(item => item[field] === filterKey)
+      if (filterKey === "Autre") {
+        const filtered = array.filter(item => !item[field])
+        return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
+      }
       return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
     }
   }
@@ -314,7 +320,7 @@ class Home extends React.Component {
                   key={index}
                   name={collections[key].title}
                   active={activeItem === collections[key].collname}
-                  disabled={currentlyAdding.length !== 0}
+                  disabled={currentlyAdding.length !== 0 || this.state[collections[key].collname].length === 0}
                   onClick={this.handleItemClick}
                 />
               ))

@@ -65,41 +65,52 @@ const Edit = (props) => {
                         <Message info hidden={hiddenPos}>
                             Vous ajoutez une classe
                         </Message>
-                        <Grid columns={1} centered>
-                            <Grid.Column mobile={16} tablet={12} computer={10}>
-                                <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 20, marginTop: 50 }} >
+                        <Grid centered>
+                            <Grid.Row style={{ marginTop: 50, marginBottom: 50 }}>
+                                <Grid.Column mobile={16} tablet={16} computer={5}>
                                     <h1>Éditez vos {title}</h1>
+                                </Grid.Column>
+                                <Grid.Column mobile={16} tablet={16} computer={9}>
                                     {
                                         currentlyAdding.length === 0 && config.filterBar &&
-                                        <GroupFilters filterWithBar={filterWithBar} currentlyFilteredBy={currentlyFilteredBy} valuesForFilterBar={valuesForFilterBar} />
+                                        <div style={{ textAlign: "right" }}>
+                                            <GroupFilters filterWithBar={filterWithBar} currentlyFilteredBy={currentlyFilteredBy} valuesForFilterBar={valuesForFilterBar} />
+                                        </div>
                                     }
-
-                                </div>
-                                <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between" }} >
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row centered style={{ marginBottom: -20 }}>
+                                <Grid.Column mobile={16} tablet={12} computer={12}>
                                     Vous pouvez cliquer sur chaque information pour la modifier.
+                                </Grid.Column>
+                                <Grid.Column mobile={16} tablet={12} computer={2}>
                                     {
                                         currentlyAdding.length !== 0 ?
-                                            <Button attached="top" color='teal' onClick={fbAdd} style={{ alignSelf: "flex-end" }}>
+                                            <Button attached="top" color='teal' size='big' onClick={fbAdd} style={{ alignSelf: "flex-end" }}>
                                                 <Icon name='check' />
                                                 Sauvegarder
                                             </Button>
                                             :
-                                            <Button attached="top" color='vk' onClick={addNew} style={{ alignSelf: "flex-end" }}>
+                                            <Button attached="top" color='vk' size='big' onClick={addNew} style={{ alignSelf: "flex-end" }}>
                                                 <Icon name='add' />
                                                 Ajouter
                                             </Button>
                                     }
-                                </div>
-                                <Table
-                                    data={data}
-                                    errorMessage={errorMessage}
-                                    onTableChange={handleTableChange}
-                                    deleteMe={deleteMe}
-                                    columns={enhancedColumns()}
-                                    deleteFormatter={deleteFormatter}
-                                    currentlyAdding={currentlyAdding}
-                                />
-                            </Grid.Column>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column mobile={16} tablet={16} computer={14}>
+                                    <Table
+                                        data={data}
+                                        errorMessage={errorMessage}
+                                        onTableChange={handleTableChange}
+                                        deleteMe={deleteMe}
+                                        columns={enhancedColumns()}
+                                        deleteFormatter={deleteFormatter}
+                                        currentlyAdding={currentlyAdding}
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                     </div>
             }
