@@ -5,9 +5,11 @@ import { Grid, Menu, Segment } from "semantic-ui-react";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
-import { studentsEdit, evalsEdit, commentsEdit, topicsEdit } from './../constants/edition';
+import { collections, studentsEdit, evalsEdit, commentsEdit, topicsEdit } from './../constants/edition';
 import { db, auth } from './../firebase/firebase';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
+var _ = require('lodash');
 
 class Home extends React.Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class Home extends React.Component {
       activeItem: "addgroup",
       editConfig: {},
       data: [],
+      search: "",
       errorMessage: null,
       hiddenNeg: true,
       hiddenPos: true,
@@ -23,40 +26,24 @@ class Home extends React.Component {
       evals: [],
       comments: [],
       topics: [],
-      currentlyAdding: []
+      currentlyAdding: [],
+      selectedGroup: null,
+      currentGroup: "",
+      purged: []
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const uid = auth.currentUser.uid;
-    await db.collection("users").doc(uid).collection("students").get()
-      .then(snapshot => {
-        this.addSnapshotToState(snapshot, "students")
-      })
-      .catch(err => {
-        console.log('Error getting documents', err)
-      });
-    await db.collection("users").doc(uid).collection("evals").get()
-      .then(snapshot => {
-        this.addSnapshotToState(snapshot, "evals")
-      })
-      .catch(err => {
-        console.log('Error getting documents', err)
-      });
-    await db.collection("users").doc(uid).collection("comments").get()
-      .then(snapshot => {
-        this.addSnapshotToState(snapshot, "comments")
-      })
-      .catch(err => {
-        console.log('Error getting documents', err)
-      });
-    await db.collection("users").doc(uid).collection("topics").get()
-      .then(snapshot => {
-        this.addSnapshotToState(snapshot, "topics")
-      })
-      .catch(err => {
-        console.log('Error getting documents', err)
-      });
+    collections.forEach(col => {
+      db.collection("users").doc(uid).collection(col).get()
+        .then(snapshot => {
+          this.addSnapshotToState(snapshot, col)
+        })
+        .catch(err => {
+          console.log('Error getting documents', err)
+        });
+    })
   }
 
   addSnapshotToState = (snapshot, whichData) => {
@@ -83,9 +70,10 @@ class Home extends React.Component {
   }
 
   handleItemClick = (e, { name }) => {
-    const { students, evals, comments, topics } = this.state
+    const { students, evals, comments, topics } = this.state;
     switch (name) {
       case "Élèves":
+        console.log(this.state["evals"])
         return this.setState({ activeItem: "addgroup" })
       case "Classes":
         return this.setState({ editConfig: studentsEdit, data: students, activeItem: "students" })
@@ -109,20 +97,68 @@ class Home extends React.Component {
   addNew = () => {
     let { data, currentlyAdding } = this.state;
     const random = this.getRandomInt()
-    const id = `new${data.length + 1}-${random}`;
+    const id = `aaanew-${data.length + 1}-${random}`;
     const newDoc = { id }
-    data.push(newDoc)
     currentlyAdding.push(newDoc)
-    this.setState({ currentlyAdding })
-    this.updateState(data)
+    data = []
+    data.push(newDoc)
+    this.setState({ currentlyAdding, data, currentGroup: "" })
+    console.log("CA", currentlyAdding, "data", data)
+  }
+
+  fbAdd = () => {
+    const uid = auth.currentUser.uid;
+    const { activeItem, currentlyAdding, data } = this.state;
+    currentlyAdding.forEach(newRow => {
+      let newValue = data.find(row => row.id === newRow.id)
+      db.collection("users").doc(uid).collection(activeItem).add(newValue)
+        .then(ref => {
+          console.log("Élément ajouté !", ref);
+          newValue.id = ref.id
+          this.refreshData(newValue)
+        })
+    })
+    this.setState({ currentlyAdding: [] })
+  }
+
+  refreshData = (newValue) => {
+    const { activeItem, students, evals, comments, topics } = this.state;
+    switch (activeItem) {
+      case "students":
+        if (newValue) { students.push(newValue) }
+        this.setState({ data: students })
+        break;
+      case "evals":
+        if (newValue) { evals.push(newValue) }
+        this.setState({ data: evals })
+        break;
+      case "comments":
+        if (newValue) { comments.push(newValue) }
+        this.setState({ data: comments })
+        break;
+      case "topics":
+        if (newValue) { topics.push(newValue) }
+        this.setState({ data: topics })
+        break;
+      default:
+        return
+    }
   }
 
   deleteMe = (rowIndex, rowId) => {
-    console.log(rowIndex)
-    const { data } = this.state;
-    data.splice(rowIndex, 1)
-    this.updateState(data)
-    this.fbRemove(rowId)
+    const { data, currentlyAdding } = this.state;
+    var purged = _.remove(data, (item) => item.id === rowId);
+    this.setState({ purged })
+    if (currentlyAdding.length === 0) {
+      // delete op
+      this.updateState(data)
+      this.fbRemove(rowId)
+      return
+    } else {
+      // cancel op
+      this.setState({ currentlyAdding: [] })
+      this.refreshData()
+    }
   }
 
   handleEdit = (data, cellEdit) => {
@@ -138,7 +174,11 @@ class Home extends React.Component {
       }
       return row;
     });
-    this.updateState(newData)
+    if (rowId.length === 20) {
+      this.updateState(newData)
+    } else {
+      this.setState({ data: newData })
+    }
   }
 
   handleSort = (data, sortField, sortOrder) => {
@@ -165,6 +205,65 @@ class Home extends React.Component {
     this.updateState(result)
   }
 
+  setSelectedGroup = (studsInGroup, group) => {
+    if (studsInGroup[0] === "reset") {
+      this.setState({ selectedGroup: null, currentGroup: "" })
+      this.refreshData()
+      console.log("tous")
+    } else {
+      this.setState({ selectedGroup: studsInGroup, data: studsInGroup, currentGroup: group })
+    }
+  }
+
+  setBackData = () => {
+    const { activeItem, students, evals, comments, topics, selectedGroup } = this.state;
+    if (selectedGroup) {
+      console.log("returning sg")
+      return selectedGroup
+    } else if (selectedGroup === null) {
+      switch (activeItem) {
+        case "students":
+          return students;
+        case "evals":
+          return evals;
+        case "comments":
+          return comments;
+        case "topics":
+          return topics;
+        default:
+          return []
+      }
+    }
+  }
+
+  handleSearch = (props) => {
+    const { filters } = props
+    const backData = this.setBackData();
+    // setTimeout(() => {
+    const result = backData.filter((row) => {
+      let valid = true;
+      for (const dataField in filters) {
+        const { filterVal, filterType, comparator } = filters[dataField];
+        if (filterType === 'TEXT') {
+          if (comparator === "LIKE") {
+            valid = row[dataField].toString().indexOf(filterVal) > -1;
+            console.log("valid", valid)
+          } else {
+            valid = row[dataField] === filterVal;
+            console.log("invalid")
+          }
+        }
+        if (!valid) break;
+      }
+      return valid;
+    });
+    console.log(result)
+    this.setState(() => ({
+      data: result
+    }));
+    // }, 500);
+  }
+
   handleTableChange = (type, { ...props }) => {
     console.log(type)
     switch (type) {
@@ -172,6 +271,8 @@ class Home extends React.Component {
         return this.handleSort(props.data, props.sortField, props.sortOrder)
       case "cellEdit":
         return this.handleEdit(props.data, props.cellEdit)
+      case "filter":
+        return this.handleSearch(props)
       default:
         return
     }
@@ -212,20 +313,6 @@ class Home extends React.Component {
     }
   }
 
-  fbAdd = () => {
-    const uid = auth.currentUser.uid;
-    const { activeItem, currentlyAdding, data } = this.state;
-    console.log(currentlyAdding, data)
-    currentlyAdding.forEach(newRow => {
-      const newValue = data.find(row => row.id === newRow.id)
-      db.collection("users").doc(uid).collection(activeItem).add(newValue)
-        .then(ref => {
-          console.log("Élément ajouté !", newValue);
-        });
-    })
-    this.setState({ currentlyAdding: [] })
-  }
-
   async fbRemove(rowId) {
     const uid = auth.currentUser.uid;
     const { activeItem } = this.state;
@@ -236,8 +323,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding } = this.state;
-    const { handleTableChange, deleteMe, addNew, fbAdd } = this;
+    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding, students, currentGroup } = this.state;
+    const { handleTableChange, deleteMe, addNew, fbAdd, setSelectedGroup } = this;
     return (
       <Grid centered style={{ marginTop: 20 }}>
         <Grid.Column computer={14}>
@@ -245,26 +332,31 @@ class Home extends React.Component {
             <Menu.Item
               name="Élèves"
               active={activeItem === "addgroup"}
+              disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Classes"
               active={activeItem === "students"}
+              disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Évaluations"
               active={activeItem === "evals"}
+              disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Remarques"
               active={activeItem === "comments"}
+              disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
             <Menu.Item
               name="Sujets"
               active={activeItem === "topics"}
+              disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
             <Menu.Menu
@@ -273,6 +365,7 @@ class Home extends React.Component {
               <Menu.Item
                 name="Mes infos"
                 active={activeItem === "infos"}
+                disabled={currentlyAdding.length !== 0}
                 onClick={this.handleItemClick}
               />
             </Menu.Menu>
@@ -286,7 +379,7 @@ class Home extends React.Component {
                     Hello mes infos
                             </div>
                   :
-                  <Edit editConfig={editConfig} addNew={addNew} fbAdd={fbAdd} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} currentlyAdding={currentlyAdding} />
+                  <Edit editConfig={editConfig} addNew={addNew} fbAdd={fbAdd} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} currentlyAdding={currentlyAdding} setSelectedGroup={setSelectedGroup} students={students} currentGroup={currentGroup} />
             }
           </div>
         </Grid.Column>

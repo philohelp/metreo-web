@@ -1,31 +1,34 @@
-import { studentsRef, evalsRef, commentsRef, topicsRef } from './../firebase/db';
+export const collections = ["students", "evals", "comments", "topics"]
 
 export const studentsEdit = {
-    ref: studentsRef(),
-    fake: [{ id: "1", name: "bla", authname: "bli", firstname: "blu", group: "bloublou", edit: "blo" }, { id: "2", name: "bla", authname: "bliqdfqf", firstname: "bluqfdsqf", group: "bloubloudfqsf", edit: "blocfqds" }],
     title: "élèves",
     columns: [
         {
             dataField: 'name',
             text: 'Nom',
-            editCellClasses: 'cell-edit'
+            editCellClasses: 'cell-edit',
+            filter: true,
+            sort: true
         }, {
             dataField: 'firstname',
             text: 'Prénom',
-            editCellClasses: 'cell-edit'
+            editCellClasses: 'cell-edit',
+            filter: true,
+            sort: true
         },
         {
             dataField: 'group',
             text: 'Classe',
             headerStyle: { width: 150 },
-            editCellClasses: 'cell-edit'
+            editCellClasses: 'cell-edit',
+            filter: true,
+            sort: true
         }
-    ]
+    ],
+    fake: [{ id: "1", name: "bla", authname: "bli", firstname: "blu", group: "bloublou", edit: "blo" }, { id: "2", name: "bla", authname: "bliqdfqf", firstname: "bluqfdsqf", group: "bloubloudfqsf", edit: "blocfqds" }],
 }
 
 export const evalsEdit = {
-    ref: evalsRef(),
-    fake: [{ id: "1", coeff: "bla", exerctype: "bli", evalab: "blu", desc: "blo", hidden: "bla", matter: "bli", rating: "blu" }, { id: "2", coeff: "bla", exerctype: "bli", evalab: "blu", desc: "blo", hidden: "bla", matter: "bli", rating: "blu" }],
     title: "évaluations",
     columns: [
         {
@@ -70,12 +73,11 @@ export const evalsEdit = {
             editCellClasses: 'cell-edit',
             hidden: true
         }
-    ]
+    ],
+    fake: [{ id: "1", coeff: "bla", exerctype: "bli", evalab: "blu", desc: "blo", hidden: "bla", matter: "bli", rating: "blu" }, { id: "2", coeff: "bla", exerctype: "bli", evalab: "blu", desc: "blo", hidden: "bla", matter: "bli", rating: "blu" }],
 }
 
 export const commentsEdit = {
-    ref: commentsRef(),
-    fake: [{ id: "1", exerctype: "bla", evalab: "bli", txt: "blu", hidden: "blo" }, { id: "2", exerctype: "bla", evalab: "bli", txt: "blu", hidden: "blo" }],
     title: "remarques",
     columns: [
         {
@@ -96,6 +98,7 @@ export const commentsEdit = {
             text: 'Texte',
             headerStyle: { width: "60%" },
             editCellClasses: 'cell-edit',
+            filter: true,
             // sort: true
         },
         {
@@ -104,12 +107,11 @@ export const commentsEdit = {
             editCellClasses: 'cell-edit',
             hidden: true
         }
-    ]
+    ],
+    fake: [{ id: "1", exerctype: "bla", evalab: "bli", txt: "blu", hidden: "blo" }, { id: "2", exerctype: "bla", evalab: "bli", txt: "blu", hidden: "blo" }],
 }
 
 export const topicsEdit = {
-    ref: topicsRef(),
-    fake: [{ id: "1", exerctype: "bla", authname: "bli", title: "blu", edit: "blo" }, { id: "2", exerctype: "blap", authname: "blim blim", title: "bludde", edit: "blousd" }],
     title: "sujets",
     columns: [{
         dataField: 'exerctype',
@@ -121,13 +123,16 @@ export const topicsEdit = {
         dataField: 'authname',
         text: 'Auteur',
         editCellClasses: 'cell-edit',
-        hidden: true
+        headerStyle: { width: "20%" },
+        filter: true
     },
     {
         dataField: 'title',
         text: 'Titre',
         editCellClasses: 'cell-edit',
+        filter: true,
         sort: true
     }
-    ]
+    ],
+    fake: [{ id: "1", exerctype: "bla", authname: "bli", title: "blu", edit: "blo" }, { id: "2", exerctype: "blap", authname: "blim blim", title: "bludde", edit: "blousd" }],
 }
