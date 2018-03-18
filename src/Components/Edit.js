@@ -6,23 +6,16 @@ import { textFilter } from 'react-bootstrap-table2-filter';
 import { Grid, Message, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
-    const { hiddenNeg, hiddenPos, errorMessage, editConfig, addNew, fbAdd, deleteMe, handleTableChange, data, currentlyAdding, setSelectedGroup, students, currentGroup } = props;
-    const { title, columns } = editConfig;
+    const { hiddenNeg, hiddenPos, errorMessage, config, addNew, fbAdd, deleteMe, handleTableChange, data, currentlyAdding, filterWithBar, currentlyFilteredBy, valuesForFilterBar } = props;
+    const { title, columns } = config;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
         const { deleteMe } = props;
         const rowId = row.id;
         return (
             <div>
-                {
-                    rowId.length === 20 ?
-                        <Button icon color="pink" onClick={() => deleteMe(rowIndex, rowId)}>
-                            <Icon name='remove' />
-                        </Button>
-                        :
-                        <Button icon color="pink" onClick={() => deleteMe(rowIndex, rowId)}>
-                            <Icon name='remove' />
-                        </Button>
-                }
+                <Button icon color="pink" onClick={() => deleteMe(rowIndex, rowId)}>
+                    <Icon name='remove' />
+                </Button>
             </div>
         );
     }
@@ -68,19 +61,17 @@ const Edit = (props) => {
                     <div>
                         <Message negative hidden={hiddenNeg}>
                             Oups.... il manque des informations. Merci de bien vouloir recommencer.
-                    </Message>
+                        </Message>
                         <Message info hidden={hiddenPos}>
                             Vous ajoutez une classe
-                    </Message>
+                        </Message>
                         <Grid columns={1} centered>
                             <Grid.Column mobile={16} tablet={12} computer={10}>
                                 <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 20, marginTop: 50 }} >
                                     <h1>Éditez vos {title}</h1>
                                     {
-                                        currentlyAdding.length === 0 ?
-                                            <GroupFilters setSelectedGroup={setSelectedGroup} students={students} currentGroup={currentGroup} />
-                                            :
-                                            null
+                                        currentlyAdding.length === 0 && config.filterBar &&
+                                        <GroupFilters filterWithBar={filterWithBar} currentlyFilteredBy={currentlyFilteredBy} valuesForFilterBar={valuesForFilterBar} />
                                     }
 
                                 </div>

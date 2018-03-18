@@ -5,7 +5,7 @@ import { Grid, Menu, Segment } from "semantic-ui-react";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
-import { collections, studentsEdit, evalsEdit, commentsEdit, topicsEdit } from './../constants/edition';
+import { collections } from './../constants/edition';
 import { db, auth } from './../firebase/firebase';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
@@ -16,37 +16,34 @@ class Home extends React.Component {
     super(props);
     this.state = {
       activeItem: "addgroup",
-      editConfig: {},
+      config: {},
       data: [],
       search: "",
       errorMessage: null,
       hiddenNeg: true,
       hiddenPos: true,
-      students: [],
-      evals: [],
-      comments: [],
-      topics: [],
       currentlyAdding: [],
       selectedGroup: null,
-      currentGroup: "",
+      currentlyFilteredBy: "",
       purged: []
     };
   }
 
   componentWillMount() {
     const uid = auth.currentUser.uid;
-    collections.forEach(col => {
-      db.collection("users").doc(uid).collection(col).get()
+    for (const key in collections) {
+      this.setState({ [key]: [] })
+      db.collection("users").doc(uid).collection(key).get()
         .then(snapshot => {
-          this.addSnapshotToState(snapshot, col)
+          this.addSnapshotToState(snapshot, key)
         })
         .catch(err => {
           console.log('Error getting documents', err)
         });
-    })
+    }
   }
 
-  addSnapshotToState = (snapshot, whichData) => {
+  addSnapshotToState = (snapshot, collname) => {
     let container = []
     let newdoc = {}
     snapshot.forEach(doc => {
@@ -55,44 +52,35 @@ class Home extends React.Component {
       newdoc.edit = "truc";
       container.push(newdoc);
     });
-    switch (whichData) {
-      case "students":
-        return this.setState({ students: container });
-      case "evals":
-        return this.setState({ evals: container });
-      case "comments":
-        return this.setState({ comments: container });
-      case "topics":
-        return this.setState({ topics: container });
-      default:
-        return
-    }
+    this.setState({ [collname]: container })
   }
 
   handleItemClick = (e, { name }) => {
-    const { students, evals, comments, topics } = this.state;
-    switch (name) {
-      case "Élèves":
-        console.log(this.state["evals"])
-        return this.setState({ activeItem: "addgroup" })
-      case "Classes":
-        return this.setState({ editConfig: studentsEdit, data: students, activeItem: "students" })
-      case "Évaluations":
-        return this.setState({ editConfig: evalsEdit, data: evals, activeItem: "evals" })
-      case "Remarques":
-        return this.setState({ editConfig: commentsEdit, data: comments, activeItem: "comments" })
-      case "Sujets":
-        return this.setState({ editConfig: topicsEdit, data: topics, activeItem: "topics" })
-      case "Mes infos":
-        return this.setState({ activeItem: "infos" })
-      default:
-        return
+    if (name === "Élèves") {
+      return this.setState({ activeItem: "addgroup" })
+    } else if (name === "Mes infos") {
+      return this.setState({ activeItem: "infos" })
+    } else {
+      for (const key in collections) {
+        if (collections[key].title === name) {
+          const config = collections[key];
+          const collname = collections[key].collname;
+          const array = this.state[collname];
+          this.setState({
+            config,
+            data: array,
+            activeItem: collname
+          })
+        }
+      }
     }
   };
 
   getRandomInt() {
     return Math.floor(Math.random() * Math.floor(1000));
   }
+
+  // Add, edit and delete items
 
   addNew = () => {
     let { data, currentlyAdding } = this.state;
@@ -102,47 +90,7 @@ class Home extends React.Component {
     currentlyAdding.push(newDoc)
     data = []
     data.push(newDoc)
-    this.setState({ currentlyAdding, data, currentGroup: "" })
-    console.log("CA", currentlyAdding, "data", data)
-  }
-
-  fbAdd = () => {
-    const uid = auth.currentUser.uid;
-    const { activeItem, currentlyAdding, data } = this.state;
-    currentlyAdding.forEach(newRow => {
-      let newValue = data.find(row => row.id === newRow.id)
-      db.collection("users").doc(uid).collection(activeItem).add(newValue)
-        .then(ref => {
-          console.log("Élément ajouté !", ref);
-          newValue.id = ref.id
-          this.refreshData(newValue)
-        })
-    })
-    this.setState({ currentlyAdding: [] })
-  }
-
-  refreshData = (newValue) => {
-    const { activeItem, students, evals, comments, topics } = this.state;
-    switch (activeItem) {
-      case "students":
-        if (newValue) { students.push(newValue) }
-        this.setState({ data: students })
-        break;
-      case "evals":
-        if (newValue) { evals.push(newValue) }
-        this.setState({ data: evals })
-        break;
-      case "comments":
-        if (newValue) { comments.push(newValue) }
-        this.setState({ data: comments })
-        break;
-      case "topics":
-        if (newValue) { topics.push(newValue) }
-        this.setState({ data: topics })
-        break;
-      default:
-        return
-    }
+    this.setState({ currentlyAdding, data, currentlyFilteredBy: "" })
   }
 
   deleteMe = (rowIndex, rowId) => {
@@ -151,13 +99,13 @@ class Home extends React.Component {
     this.setState({ purged })
     if (currentlyAdding.length === 0) {
       // delete op
-      this.updateState(data)
+      this.updateStateAndStore(data)
       this.fbRemove(rowId)
       return
     } else {
       // cancel op
       this.setState({ currentlyAdding: [] })
-      this.refreshData()
+      this.refreshStateWithStore()
     }
   }
 
@@ -175,11 +123,76 @@ class Home extends React.Component {
       return row;
     });
     if (rowId.length === 20) {
-      this.updateState(newData)
+      this.updateStateAndStore(newData)
     } else {
       this.setState({ data: newData })
     }
   }
+
+  // Handle data and store
+
+  updateStateAndStore(newData) {
+    // Rebuild state and store with a brand new array
+    const { config } = this.state;
+    const activeColl = config.collname;
+    this.setState(() => ({
+      data: newData,
+      [activeColl]: newData,
+      errorMessage: null
+    }));
+  }
+
+  refreshStateWithStore = (newValue) => {
+    // May or may not add a value to store and take it to rebuild the state
+    const activeColl = this.state.config.collname;
+    let array = this.state[activeColl]
+    if (newValue) { array.push(newValue) }
+    this.setState({ data: array })
+  }
+
+  // Firebase ops
+
+  fbAdd = () => {
+    // No async because we keep the possibility of batch add
+    const uid = auth.currentUser.uid;
+    const { config, currentlyAdding, data } = this.state;
+    const activeColl = config.collname;
+    currentlyAdding.forEach(newRow => {
+      let newValue = data.find(row => row.id === newRow.id)
+      db.collection("users").doc(uid).collection(activeColl).add(newValue)
+        .then(ref => {
+          console.log("Élément ajouté !", ref);
+          newValue.id = ref.id
+          this.refreshStateWithStore(newValue)
+        })
+    })
+    this.setState({ currentlyAdding: [] })
+  }
+
+  async fbEdit(rowId, newValue) {
+    const uid = auth.currentUser.uid;
+    const activeColl = this.state.config.collname;
+    if (rowId.length === 20) {
+      await db.collection("users").doc(uid).collection(activeColl).doc(rowId).set(newValue)
+        .then(ref => {
+          console.log("Élément modifié !", rowId, newValue);
+        });
+    } else {
+      console.log("rejecting", newValue)
+      return
+    }
+  }
+
+  async fbRemove(rowId) {
+    const uid = auth.currentUser.uid;
+    const activeColl = this.state.config.collname;
+    await db.collection("users").doc(uid).collection(activeColl).doc(rowId).delete()
+      .then(ref => {
+        console.log("Élément supprimé !", rowId);
+      });
+  }
+
+  // Sort and filter functions
 
   handleSort = (data, sortField, sortOrder) => {
     let result;
@@ -202,43 +215,37 @@ class Home extends React.Component {
         return 0;
       });
     }
-    this.updateState(result)
+    this.updateStateAndStore(result)
   }
 
-  setSelectedGroup = (studsInGroup, group) => {
-    if (studsInGroup[0] === "reset") {
-      this.setState({ selectedGroup: null, currentGroup: "" })
-      this.refreshData()
+  filterWithBar = (filterKey) => {
+    if (filterKey === "reset") {
+      this.setState({ selectedGroup: null, currentlyFilteredBy: "" })
+      this.refreshStateWithStore()
       console.log("tous")
     } else {
-      this.setState({ selectedGroup: studsInGroup, data: studsInGroup, currentGroup: group })
+      const { config } = this.state;
+      const activeColl = config.collname;
+      const field = config.filterBar;
+      const array = this.state[activeColl];
+      const filtered = array.filter(item => item[field] === filterKey)
+      return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
     }
   }
 
-  setBackData = () => {
-    const { activeItem, students, evals, comments, topics, selectedGroup } = this.state;
+  setBackDataForSearch = () => {
+    const { config, selectedGroup } = this.state;
+    const activeColl = config.collname;
     if (selectedGroup) {
-      console.log("returning sg")
       return selectedGroup
     } else if (selectedGroup === null) {
-      switch (activeItem) {
-        case "students":
-          return students;
-        case "evals":
-          return evals;
-        case "comments":
-          return comments;
-        case "topics":
-          return topics;
-        default:
-          return []
-      }
+      return this.state[activeColl]
     }
   }
 
   handleSearch = (props) => {
     const { filters } = props
-    const backData = this.setBackData();
+    const backData = this.setBackDataForSearch();
     // setTimeout(() => {
     const result = backData.filter((row) => {
       let valid = true;
@@ -247,17 +254,14 @@ class Home extends React.Component {
         if (filterType === 'TEXT') {
           if (comparator === "LIKE") {
             valid = row[dataField].toString().indexOf(filterVal) > -1;
-            console.log("valid", valid)
           } else {
             valid = row[dataField] === filterVal;
-            console.log("invalid")
           }
         }
         if (!valid) break;
       }
       return valid;
     });
-    console.log(result)
     this.setState(() => ({
       data: result
     }));
@@ -265,7 +269,6 @@ class Home extends React.Component {
   }
 
   handleTableChange = (type, { ...props }) => {
-    console.log(type)
     switch (type) {
       case "sort":
         return this.handleSort(props.data, props.sortField, props.sortOrder)
@@ -278,53 +281,23 @@ class Home extends React.Component {
     }
   }
 
-  updateState(newData) {
-    const { activeItem } = this.state;
-    this.setState(() => ({
-      data: newData,
-      errorMessage: null
-    }));
-    switch (activeItem) {
-      case "students":
-        return this.setState({ students: newData })
-      case "evals":
-        return this.setState({ evals: newData })
-      case "comments":
-        return this.setState({ comments: newData })
-      case "topics":
-        return this.setState({ topics: newData })
-      default:
-        return
+  getValuesForFilterBar = () => {
+    const { config } = this.state;
+    const collection = config.collname;
+    if (config.filterBar) {
+      const array = this.state[collection];
+      const field = config.filterBar;
+      const flattenToField = _.map(array, field);
+      return _.uniq(flattenToField)
+    } else if (!config.filterBar) {
+      return []
     }
-  }
-
-  async fbEdit(rowId, newValue) {
-    const uid = auth.currentUser.uid;
-    const { activeItem } = this.state;
-    console.log(rowId, newValue)
-    if (rowId.length === 20) {
-      await db.collection("users").doc(uid).collection(activeItem).doc(rowId).set(newValue)
-        .then(ref => {
-          console.log("Élément modifié !", rowId, newValue);
-        });
-    } else {
-      console.log("rejecting", newValue)
-      return
-    }
-  }
-
-  async fbRemove(rowId) {
-    const uid = auth.currentUser.uid;
-    const { activeItem } = this.state;
-    await db.collection("users").doc(uid).collection(activeItem).doc(rowId).delete()
-      .then(ref => {
-        console.log("Élément supprimé !", rowId);
-      });
   }
 
   render() {
-    const { activeItem, editConfig, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding, students, currentGroup } = this.state;
-    const { handleTableChange, deleteMe, addNew, fbAdd, setSelectedGroup } = this;
+    const { activeItem, config, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding, currentlyFilteredBy } = this.state;
+    const { handleTableChange, deleteMe, addNew, fbAdd, filterWithBar } = this;
+    const valuesForFilterBar = this.getValuesForFilterBar()
     return (
       <Grid centered style={{ marginTop: 20 }}>
         <Grid.Column computer={14}>
@@ -335,30 +308,17 @@ class Home extends React.Component {
               disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
             />
-            <Menu.Item
-              name="Classes"
-              active={activeItem === "students"}
-              disabled={currentlyAdding.length !== 0}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name="Évaluations"
-              active={activeItem === "evals"}
-              disabled={currentlyAdding.length !== 0}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name="Remarques"
-              active={activeItem === "comments"}
-              disabled={currentlyAdding.length !== 0}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name="Sujets"
-              active={activeItem === "topics"}
-              disabled={currentlyAdding.length !== 0}
-              onClick={this.handleItemClick}
-            />
+            {
+              Object.keys(collections).map((key, index) => (
+                <Menu.Item
+                  key={index}
+                  name={collections[key].title}
+                  active={activeItem === collections[key].collname}
+                  disabled={currentlyAdding.length !== 0}
+                  onClick={this.handleItemClick}
+                />
+              ))
+            }
             <Menu.Menu
               position="right"
             >
@@ -376,10 +336,24 @@ class Home extends React.Component {
                 ? <Segment style={{ paddingBottom: 50 }}><AddGroup /></Segment>
                 : activeItem === "infos"
                   ? <div>
-                    Hello mes infos
-                            </div>
+                    Rubrique en cours de développement.
+                    </div>
                   :
-                  <Edit editConfig={editConfig} addNew={addNew} fbAdd={fbAdd} deleteMe={deleteMe} handleTableChange={handleTableChange} hiddenNeg={hiddenNeg} hiddenPos={hiddenPos} errorMessage={errorMessage} data={data} currentlyAdding={currentlyAdding} setSelectedGroup={setSelectedGroup} students={students} currentGroup={currentGroup} />
+                  <Edit
+                    config={config}
+                    addNew={addNew}
+                    fbAdd={fbAdd}
+                    deleteMe={deleteMe}
+                    handleTableChange={handleTableChange}
+                    hiddenNeg={hiddenNeg}
+                    hiddenPos={hiddenPos}
+                    errorMessage={errorMessage}
+                    data={data}
+                    currentlyAdding={currentlyAdding}
+                    filterWithBar={filterWithBar}
+                    valuesForFilterBar={valuesForFilterBar}
+                    currentlyFilteredBy={currentlyFilteredBy}
+                  />
             }
           </div>
         </Grid.Column>
