@@ -91,7 +91,7 @@ const Edit = (props) => {
                                                 Sauvegarder
                                             </Button>
                                             :
-                                            <Button attached="top" color='vk' size='big' onClick={addNew} style={{ alignSelf: "flex-end" }}>
+                                            <Button attached="top" color='vk' size='big' onClick={() => addNew()} style={{ alignSelf: "flex-end" }}>
                                                 <Icon name='add' />
                                                 Ajouter
                                             </Button>

@@ -1,7 +1,7 @@
 import React from "react";
 import withAuthorization from "./withAuthorization";
 
-import { Grid, Menu, Segment } from "semantic-ui-react";
+import { Grid, Menu, Segment, Button, Loader } from "semantic-ui-react";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
@@ -76,11 +76,18 @@ class Home extends React.Component {
     }
   };
 
+  // Add, edit and delete items
+
+  handleDismiss = () => {
+    this.setState({ visible: false })
+    setTimeout(() => {
+      this.setState({ visible: true })
+    }, 2000)
+  }
+
   getRandomInt() {
     return Math.floor(Math.random() * Math.floor(1000));
   }
-
-  // Add, edit and delete items
 
   addNew = () => {
     let { data, currentlyAdding } = this.state;
@@ -316,15 +323,18 @@ class Home extends React.Component {
             />
             {
               Object.keys(collections).map((key, index) => (
-                <Menu.Item
-                  key={index}
-                  name={collections[key].title}
-                  active={activeItem === collections[key].collname}
-                  disabled={currentlyAdding.length !== 0 || this.state[collections[key].collname].length === 0}
-                  onClick={this.handleItemClick}
-                />
+                <div key={index}>
+                  <Menu.Item
+                    name={collections[key].title}
+                    active={activeItem === collections[key].collname}
+                    disabled={currentlyAdding.length !== 0 || this.state[collections[key].collname].length === 0}
+                    onClick={this.handleItemClick}
+                  />
+                  <Loader active={this.state[collections[key].collname].length === 0} style={{ marginTop: -147 }} />
+                </div>
               ))
             }
+
             <Menu.Menu
               position="right"
             >
