@@ -10,7 +10,7 @@ const Table = (props) => {
 
     const cellEdit = cellEditFactory({
         mode: 'click',
-        errorMessage: props.errorMessage,
+        blurToSave: true
     });
 
     const rowClasses = 'custom-row-class';

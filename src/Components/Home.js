@@ -1,7 +1,7 @@
 import React from "react";
 import withAuthorization from "./withAuthorization";
 
-import { Grid, Menu, Segment, Button, Loader } from "semantic-ui-react";
+import { Grid, Menu, Segment, Button, Loader, Message, Icon } from "semantic-ui-react";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
@@ -19,13 +19,16 @@ class Home extends React.Component {
       config: {},
       data: [],
       search: "",
-      errorMessage: null,
-      hiddenNeg: true,
-      hiddenPos: true,
+      negative: false,
+      positive: true,
+      mheader: "",
+      mcontent: "",
+      messagehidden: true,
+      confirmhidden: true,
+      corridor: "",
       currentlyAdding: [],
       selectedGroup: null,
-      currentlyFilteredBy: "",
-      purged: []
+      currentlyFilteredBy: ""
     };
   }
 
@@ -76,13 +79,59 @@ class Home extends React.Component {
     }
   };
 
-  // Add, edit and delete items
+  // Add, edit and delete items 
 
-  handleDismiss = () => {
-    this.setState({ visible: false })
-    setTimeout(() => {
-      this.setState({ visible: true })
-    }, 2000)
+  handleMessage = (style, header, content) => {
+    if (style === "positive") {
+      this.setState({ messagehidden: false, positive: true, negative: false, mheader: header, mcontent: content })
+      setTimeout(() => {
+        this.setState({ messagehidden: true, positive: true, negative: false, mheader: header, mcontent: content })
+      }, 6000)
+    } else if (style === "negative") {
+      this.setState({ messagehidden: false, positive: false, negative: true, mheader: header, mcontent: content })
+      setTimeout(() => {
+        this.setState({ messagehidden: true, positive: false, negative: true, mheader: header, mcontent: content })
+      }, 6000)
+    }
+
+  }
+
+  handleRedCrossButton = (rowIndex, row) => {
+    const { currentlyAdding } = this.state;
+    if (currentlyAdding.length === 0) {
+      // delete op
+      const corridor = row;
+      this.handleConfirm(corridor)
+      window.scrollTo(0, 0)
+      return
+    } else {
+      // cancel op
+      this.setState({ currentlyAdding: [] });
+      this.refreshStateWithStore();
+    }
+  }
+
+  handleConfirm = (corridor) => {
+    const { config } = this.state;
+    const { showfield } = config;
+    const message = `L'élément sera retiré de la liste : "${corridor[showfield]}"`
+    const id = corridor.id;
+    this.setState({ corridor: id, mheader: "Confirmation", mcontent: message, confirmhidden: false })
+  }
+
+  deleteForGood = () => {
+    const { data, config, corridor } = this.state;
+    const activeColl = config.collname;
+    let store = this.state[activeColl];
+    var purged = _.remove(data, (item) => item.id === corridor);
+    var purgedStore = _.remove(store, (item) => item.id === corridor);
+    this.setState({ purged });
+    this.fbRemove(corridor)
+    this.setState({ confirmhidden: true })
+  }
+
+  cancelOp = () => {
+    this.setState({ confirmhidden: true })
   }
 
   getRandomInt() {
@@ -91,30 +140,25 @@ class Home extends React.Component {
 
   addNew = () => {
     let { data, currentlyAdding } = this.state;
-    const random = this.getRandomInt()
+    const random = this.getRandomInt();
     const id = `aaanew-${data.length + 1}-${random}`;
-    const newDoc = { id }
-    currentlyAdding.push(newDoc)
-    data = []
-    data.push(newDoc)
-    this.setState({ currentlyAdding, data, currentlyFilteredBy: "" })
+    const newDoc = { id };
+    currentlyAdding.push(newDoc);
+    data = [];
+    data.push(newDoc);
+    this.setState({ currentlyAdding, data, currentlyFilteredBy: "" });
+    this.handleMessage("positive", "", "Veuillez préciser les nom, prénom et classe de l'élève. Cliquez sur la croix pour annuler.");
   }
 
-  deleteMe = (rowIndex, rowId) => {
-    const { data, currentlyAdding, config } = this.state;
-    const activeColl = config.collname;
-    let store = this.state.data[activeColl];
-    var purged = _.remove(data, (item) => item.id === rowId);
-    var purgedStore = _.remove(store, (item) => item.id === rowId);
-    this.setState({ purged })
-    if (currentlyAdding.length === 0) {
-      // delete op
-      this.fbRemove(rowId)
-      return
-    } else {
-      // cancel op
-      this.setState({ currentlyAdding: [] })
-      this.refreshStateWithStore()
+  didItChange = (rowId, dataField, newValue) => {
+    const activeColl = this.state.config.collname;
+    const array = this.state[activeColl];
+    const formerRow = array.find(item => item.id === rowId);
+    const formerValue = formerRow[dataField];
+    if (newValue === formerValue) {
+      return false
+    } else if (newValue !== formerValue) {
+      return true
     }
   }
 
@@ -125,8 +169,12 @@ class Home extends React.Component {
       if (row.id === rowId) {
         const newRow = { ...row };
         newRow[dataField] = newValue;
-        console.log("handlechange with", newRow)
-        this.fbEdit(rowId, newRow)
+        const change = this.didItChange(rowId, dataField, newValue)
+        if (change) {
+          this.fbEdit(rowId, newRow)
+        } else if (!change) {
+          return newRow;
+        }
         return newRow;
       }
       return row;
@@ -146,8 +194,7 @@ class Home extends React.Component {
     const activeColl = config.collname;
     this.setState(() => ({
       data: newData,
-      [activeColl]: newData,
-      errorMessage: null
+      [activeColl]: newData
     }));
   }
 
@@ -172,6 +219,7 @@ class Home extends React.Component {
         .then(ref => {
           console.log("Élément ajouté !", ref);
           newValue.id = ref.id
+          this.handleMessage("positive", "Confirmation", "L'élément a bien été ajouté.")
           this.refreshStateWithStore(newValue)
         })
     })
@@ -185,6 +233,7 @@ class Home extends React.Component {
       await db.collection("users").doc(uid).collection(activeColl).doc(rowId).set(newValue)
         .then(ref => {
           console.log("Élément modifié !", rowId, newValue);
+          this.handleMessage("positive", "Confirmation", "L'élément a bien été modifié.")
         });
     } else {
       console.log("rejecting", newValue)
@@ -198,6 +247,7 @@ class Home extends React.Component {
     await db.collection("users").doc(uid).collection(activeColl).doc(rowId).delete()
       .then(ref => {
         console.log("Élément supprimé !", rowId);
+        this.handleMessage("positive", "Confirmation", "L'élément a bien été supprimé.")
       });
   }
 
@@ -231,15 +281,17 @@ class Home extends React.Component {
     if (filterKey === "reset") {
       this.setState({ selectedGroup: null, currentlyFilteredBy: "" })
       this.refreshStateWithStore()
-      console.log("tous")
+      this.handleMessage("positive", "", "Filtre supprimé : toutes les données s'affichent.")
     } else {
       const { config } = this.state;
       const activeColl = config.collname;
       const field = config.filterBar;
       const array = this.state[activeColl];
       const filtered = array.filter(item => item[field] === filterKey)
+      this.handleMessage("positive", "", `Vous avez appliqué le filtre : "${filterKey}"`)
       if (filterKey === "Autre") {
         const filtered = array.filter(item => !item[field])
+        this.handleMessage("positive", "", `Vous avez appliqué le filtre : "${filterKey}"`)
         return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
       }
       return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
@@ -308,8 +360,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { activeItem, config, hiddenNeg, hiddenPos, errorMessage, data, currentlyAdding, currentlyFilteredBy } = this.state;
-    const { handleTableChange, deleteMe, addNew, fbAdd, filterWithBar } = this;
+    const { activeItem, config, negative, positive, messagehidden, confirmhidden, mheader, mcontent, data, currentlyAdding, currentlyFilteredBy } = this.state;
+    const { handleTableChange, addNew, fbAdd, handleRedCrossButton, deleteForGood, cancelOp, filterWithBar } = this;
     const valuesForFilterBar = this.getValuesForFilterBar()
     return (
       <Grid centered style={{ marginTop: 20 }}>
@@ -346,6 +398,32 @@ class Home extends React.Component {
               />
             </Menu.Menu>
           </Menu>
+          <Message icon negative={negative} info={positive} hidden={messagehidden} size="small">
+            <Icon name='warning' style={{ fontSize: 15 }} />
+            <Message.Content style={{ marginLeft: 10 }}>
+              {mheader ?
+                <Message.Header>{mheader}</Message.Header>
+                :
+                null
+              }
+              <p>{mcontent}</p>
+            </Message.Content>
+          </Message>
+          <Message icon warning hidden={confirmhidden} size="small">
+            <Icon name='warning' style={{ fontSize: 15 }} />
+            <Message.Content style={{ marginLeft: 10 }}>
+              <Message.Header>{mheader}</Message.Header>
+              <p>{mcontent}</p>
+            </Message.Content>
+            <Button.Group>
+              <Button onClick={() => cancelOp()} >
+                Annuler
+              </Button>
+              <Button onClick={() => deleteForGood()}>
+                Confirmer
+              </Button>
+            </Button.Group>
+          </Message>
           <div>
             {
               activeItem === "addgroup"
@@ -359,11 +437,8 @@ class Home extends React.Component {
                     config={config}
                     addNew={addNew}
                     fbAdd={fbAdd}
-                    deleteMe={deleteMe}
+                    handleRedCrossButton={handleRedCrossButton}
                     handleTableChange={handleTableChange}
-                    hiddenNeg={hiddenNeg}
-                    hiddenPos={hiddenPos}
-                    errorMessage={errorMessage}
                     data={data}
                     currentlyAdding={currentlyAdding}
                     filterWithBar={filterWithBar}

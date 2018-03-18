@@ -11,10 +11,9 @@ class AddGroup extends React.Component {
     super(props);
     this.state = {
       data: [],
-      errorMessage: null,
       group: "",
-      hiddenNeg: true,
-      hiddenPos: true,
+      negative: true,
+      positive: true,
       showStep: 1
     };
   }
@@ -29,8 +28,7 @@ class AddGroup extends React.Component {
       return row;
     });
     this.setState(() => ({
-      data: result,
-      errorMessage: null
+      data: result
     }));
     console.log(result)
   }
@@ -67,7 +65,7 @@ class AddGroup extends React.Component {
   }
 
   handleChange = (value) => {
-    this.setState({ group: value, hiddenPos: false })
+    this.setState({ group: value, positive: false })
     console.log(value)
   }
 
@@ -105,7 +103,7 @@ class AddGroup extends React.Component {
   }
 
   render() {
-    const { data, group, showStep, hiddenNeg, hiddenPos, errorMessage } = this.state;
+    const { data, group, showStep, negative, positive } = this.state;
     const { deleteMe, handleChange, onSubmit, handleFileUpload, handleFileError, handleTableChange, deleteFormatter } = this;
     const columns = [{
       dataField: 'firstname',
@@ -132,10 +130,10 @@ class AddGroup extends React.Component {
 
     return (
       <div>
-        <Message negative hidden={hiddenNeg}>
+        <Message negative hidden={negative}>
           Oups.... il manque des informations. Merci de bien vouloir recommencer.
         </Message>
-        <Message info hidden={hiddenPos}>
+        <Message info hidden={positive}>
           Vous ajoutez une classe de {group}
         </Message>
 
@@ -198,7 +196,6 @@ class AddGroup extends React.Component {
                         </div>
                         <Table
                           data={data}
-                          errorMessage={errorMessage}
                           onTableChange={handleTableChange}
                           deleteMe={deleteMe}
                           columns={columns}

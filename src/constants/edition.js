@@ -3,6 +3,7 @@ export const collections = {
         collname: "students",
         title: "Classes",
         filterBar: "group",
+        showfield: "name",
         columns: [
             {
                 dataField: 'name',
@@ -30,6 +31,7 @@ export const collections = {
     evals: {
         collname: "evals",
         title: "Évaluations",
+        showfield: "evalab",
         columns: [
             {
                 dataField: 'coeff',
@@ -81,6 +83,7 @@ export const collections = {
         collname: "comments",
         title: "Remarques",
         filterBar: "evalab",
+        showfield: "txt",
         columns: [
             {
                 dataField: 'exerctype',
@@ -114,6 +117,7 @@ export const collections = {
         collname: "topics",
         title: "Sujets",
         filterBar: "exerctype",
+        showfield: "title",
         columns: [
             {
                 dataField: 'exerctype',

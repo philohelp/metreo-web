@@ -3,17 +3,15 @@ import Table from "./Table.js";
 import GroupFilters from "./GroupFilters"
 import { textFilter } from 'react-bootstrap-table2-filter';
 
-import { Grid, Message, Button, Icon } from 'semantic-ui-react';
+import { Grid, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
-    const { hiddenNeg, hiddenPos, errorMessage, config, addNew, fbAdd, deleteMe, handleTableChange, data, currentlyAdding, filterWithBar, currentlyFilteredBy, valuesForFilterBar } = props;
+    const { config, addNew, fbAdd, handleRedCrossButton, handleTableChange, data, currentlyAdding, filterWithBar, currentlyFilteredBy, valuesForFilterBar } = props;
     const { title, columns } = config;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
-        const { deleteMe } = props;
-        const rowId = row.id;
         return (
             <div>
-                <Button icon color="pink" onClick={() => deleteMe(rowIndex, rowId)}>
+                <Button icon color="pink" onClick={() => handleRedCrossButton(rowIndex, row)}>
                     <Icon name='remove' />
                 </Button>
             </div>
@@ -59,16 +57,10 @@ const Edit = (props) => {
                     <div>Entrain de charger</div>
                     :
                     <div>
-                        <Message negative hidden={hiddenNeg}>
-                            Oups.... il manque des informations. Merci de bien vouloir recommencer.
-                        </Message>
-                        <Message info hidden={hiddenPos}>
-                            Vous ajoutez une classe
-                        </Message>
                         <Grid centered>
                             <Grid.Row style={{ marginTop: 50, marginBottom: 50 }}>
                                 <Grid.Column mobile={16} tablet={16} computer={5}>
-                                    <h1>Éditez vos {title}</h1>
+                                    <h1>Éditez vos {title.toLowerCase()}</h1>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={16} computer={9}>
                                     {
@@ -102,9 +94,8 @@ const Edit = (props) => {
                                 <Grid.Column mobile={16} tablet={16} computer={14}>
                                     <Table
                                         data={data}
-                                        errorMessage={errorMessage}
                                         onTableChange={handleTableChange}
-                                        deleteMe={deleteMe}
+                                        handleRedCrossButton={handleRedCrossButton}
                                         columns={enhancedColumns()}
                                         deleteFormatter={deleteFormatter}
                                         currentlyAdding={currentlyAdding}
