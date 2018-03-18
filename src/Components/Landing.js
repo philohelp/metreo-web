@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import logo2 from './../logo2.png';
 import generic from "./../generic2.jpg";
 import iphoneaplat from "./../img/showcase/iphoneaplat.png";
+import ScrollUpButton from "react-scroll-up-button";
 
 import Carousel from "./Carousel"
 
@@ -32,6 +33,7 @@ class LandingPage extends Component {
     render() {
         return (
             <div className="bigCont">
+                <ScrollUpButton />
                 <div className="slider-area-5">
                     <div className="slider-Image">
                         <Image src={generic} alt="" />

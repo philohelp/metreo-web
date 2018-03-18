@@ -2,6 +2,7 @@ import React from "react";
 import withAuthorization from "./withAuthorization";
 
 import { Grid, Menu, Segment, Button, Loader, Message, Icon } from "semantic-ui-react";
+import ScrollUpButton from "react-scroll-up-button";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
@@ -365,6 +366,7 @@ class Home extends React.Component {
     const valuesForFilterBar = this.getValuesForFilterBar()
     return (
       <Grid centered style={{ marginTop: 20 }}>
+        <ScrollUpButton />
         <Grid.Column computer={14}>
           <Menu pointing size="huge" stackable>
             <Menu.Item
