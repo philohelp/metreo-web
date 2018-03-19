@@ -58,7 +58,7 @@ const Edit = (props) => {
                     :
                     <div>
                         <Grid centered>
-                            <Grid.Row style={{ marginTop: 50, marginBottom: 50 }}>
+                            <Grid.Row style={{ marginBottom: 50 }}>
                                 <Grid.Column mobile={16} tablet={16} computer={5}>
                                     <h1>Éditez vos {title.toLowerCase()}</h1>
                                 </Grid.Column>

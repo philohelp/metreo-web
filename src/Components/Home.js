@@ -1,11 +1,12 @@
 import React from "react";
 import withAuthorization from "./withAuthorization";
 
-import { Grid, Menu, Segment, Button, Loader, Message, Icon } from "semantic-ui-react";
+import { Grid, Menu, Segment, Loader } from "semantic-ui-react";
 import ScrollUpButton from "react-scroll-up-button";
 
 import AddGroup from "./AddGroup";
 import Edit from "./Edit";
+import Messaging from "./Messaging"
 import { collections } from './../constants/edition';
 import { db, auth } from './../firebase/firebase';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -60,7 +61,7 @@ class Home extends React.Component {
   }
 
   handleItemClick = (e, { name }) => {
-    if (name === "Élèves") {
+    if (name === "Listes") {
       return this.setState({ activeItem: "addgroup" })
     } else if (name === "Mes infos") {
       return this.setState({ activeItem: "infos" })
@@ -140,6 +141,7 @@ class Home extends React.Component {
   }
 
   addNew = () => {
+    // Cette fonction ne fait que démarrer une nouvelle ligne. Ensuite, c'est handleAddAndEdit qui prend le relais.
     let { data, currentlyAdding } = this.state;
     const random = this.getRandomInt();
     const id = `aaanew-${data.length + 1}-${random}`;
@@ -148,7 +150,7 @@ class Home extends React.Component {
     data = [];
     data.push(newDoc);
     this.setState({ currentlyAdding, data, currentlyFilteredBy: "" });
-    this.handleMessage("positive", "", "Veuillez préciser les nom, prénom et classe de l'élève. Cliquez sur la croix pour annuler.");
+    this.handleMessage("positive", "GUIDE", "Veuillez préciser les nom, prénom et classe de l'élève. Cliquez sur la croix pour annuler.");
   }
 
   didItChange = (rowId, dataField, newValue) => {
@@ -163,18 +165,22 @@ class Home extends React.Component {
     }
   }
 
-  handleEdit = (data, cellEdit) => {
+  handleAddAndEdit = (data, cellEdit) => {
+    const { currentlyAdding } = this.state;
     const { rowId, dataField, newValue } = cellEdit;
-    console.log("arrived on handleEdit", rowId)
+    console.log("arrived on handleAddAndEdit", rowId)
     const newData = data.map((row) => {
       if (row.id === rowId) {
         const newRow = { ...row };
         newRow[dataField] = newValue;
-        const change = this.didItChange(rowId, dataField, newValue)
-        if (change) {
-          this.fbEdit(rowId, newRow)
-        } else if (!change) {
-          return newRow;
+        if (currentlyAdding.length === 0) {
+          // Si ce n'est pas un ajout, alors check si ça change
+          const change = this.didItChange(rowId, dataField, newValue)
+          if (change) {
+            this.fbEdit(rowId, newRow)
+          } else if (!change) {
+            return newRow;
+          }
         }
         return newRow;
       }
@@ -220,7 +226,7 @@ class Home extends React.Component {
         .then(ref => {
           console.log("Élément ajouté !", ref);
           newValue.id = ref.id
-          this.handleMessage("positive", "Confirmation", "L'élément a bien été ajouté.")
+          this.handleMessage("positive", "CONFIRMATION", "L'élément a bien été ajouté.")
           this.refreshStateWithStore(newValue)
         })
     })
@@ -234,7 +240,7 @@ class Home extends React.Component {
       await db.collection("users").doc(uid).collection(activeColl).doc(rowId).set(newValue)
         .then(ref => {
           console.log("Élément modifié !", rowId, newValue);
-          this.handleMessage("positive", "Confirmation", "L'élément a bien été modifié.")
+          this.handleMessage("positive", "CONFIRMATION", "L'élément a bien été modifié.")
         });
     } else {
       console.log("rejecting", newValue)
@@ -248,7 +254,7 @@ class Home extends React.Component {
     await db.collection("users").doc(uid).collection(activeColl).doc(rowId).delete()
       .then(ref => {
         console.log("Élément supprimé !", rowId);
-        this.handleMessage("positive", "Confirmation", "L'élément a bien été supprimé.")
+        this.handleMessage("positive", "CONFIRMATION", "L'élément a bien été supprimé.")
       });
   }
 
@@ -282,17 +288,17 @@ class Home extends React.Component {
     if (filterKey === "reset") {
       this.setState({ selectedGroup: null, currentlyFilteredBy: "" })
       this.refreshStateWithStore()
-      this.handleMessage("positive", "", "Filtre supprimé : toutes les données s'affichent.")
+      this.handleMessage("positive", "FILTRE", "Filtre supprimé : toutes les données s'affichent.")
     } else {
       const { config } = this.state;
       const activeColl = config.collname;
       const field = config.filterBar;
       const array = this.state[activeColl];
       const filtered = array.filter(item => item[field] === filterKey)
-      this.handleMessage("positive", "", `Vous avez appliqué le filtre : "${filterKey}"`)
+      this.handleMessage("positive", "FILTRE", `Vous avez appliqué le filtre : "${filterKey}"`)
       if (filterKey === "Autre") {
         const filtered = array.filter(item => !item[field])
-        this.handleMessage("positive", "", `Vous avez appliqué le filtre : "${filterKey}"`)
+        this.handleMessage("positive", "FILTRE", `Vous avez appliqué le filtre : "${filterKey}"`)
         return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
       }
       return this.setState({ selectedGroup: filtered, data: filtered, currentlyFilteredBy: filterKey })
@@ -339,7 +345,7 @@ class Home extends React.Component {
       case "sort":
         return this.handleSort(props.data, props.sortField, props.sortOrder)
       case "cellEdit":
-        return this.handleEdit(props.data, props.cellEdit)
+        return this.handleAddAndEdit(props.data, props.cellEdit)
       case "filter":
         return this.handleSearch(props)
       default:
@@ -370,7 +376,7 @@ class Home extends React.Component {
         <Grid.Column computer={14}>
           <Menu pointing size="huge" stackable>
             <Menu.Item
-              name="Élèves"
+              name="Listes"
               active={activeItem === "addgroup"}
               disabled={currentlyAdding.length !== 0}
               onClick={this.handleItemClick}
@@ -384,11 +390,10 @@ class Home extends React.Component {
                     disabled={currentlyAdding.length !== 0 || this.state[collections[key].collname].length === 0}
                     onClick={this.handleItemClick}
                   />
-                  <Loader active={this.state[collections[key].collname].length === 0} style={{ marginTop: -147 }} />
+                  <Loader active={this.state[collections[key].collname].length === 0} style={{ marginTop: -188 }} />
                 </div>
               ))
             }
-
             <Menu.Menu
               position="right"
             >
@@ -400,36 +405,20 @@ class Home extends React.Component {
               />
             </Menu.Menu>
           </Menu>
-          <Message icon negative={negative} info={positive} hidden={messagehidden} size="small">
-            <Icon name='warning' style={{ fontSize: 15 }} />
-            <Message.Content style={{ marginLeft: 10 }}>
-              {mheader ?
-                <Message.Header>{mheader}</Message.Header>
-                :
-                null
-              }
-              <p>{mcontent}</p>
-            </Message.Content>
-          </Message>
-          <Message icon warning hidden={confirmhidden} size="small">
-            <Icon name='warning' style={{ fontSize: 15 }} />
-            <Message.Content style={{ marginLeft: 10 }}>
-              <Message.Header>{mheader}</Message.Header>
-              <p>{mcontent}</p>
-            </Message.Content>
-            <Button.Group>
-              <Button onClick={() => cancelOp()} >
-                Annuler
-              </Button>
-              <Button onClick={() => deleteForGood()}>
-                Confirmer
-              </Button>
-            </Button.Group>
-          </Message>
-          <div>
+          <Messaging
+            negative={negative}
+            positive={positive}
+            messagehidden={messagehidden}
+            confirmhidden={confirmhidden}
+            mheader={mheader}
+            mcontent={mcontent}
+            cancelOp={cancelOp}
+            deleteForGood={deleteForGood}
+          />
+          <div style={{ marginTop: messagehidden ? 90 : 0 }}>
             {
               activeItem === "addgroup"
-                ? <Segment style={{ paddingBottom: 50 }}><AddGroup /></Segment>
+                ? <AddGroup />
                 : activeItem === "infos"
                   ? <div>
                     Rubrique en cours de développement.

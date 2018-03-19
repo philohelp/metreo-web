@@ -1,6 +1,6 @@
 import React from 'react';
-import withAuthorization from './withAuthorization';
 import Table from "./Table.js";
+import { db, auth } from './../firebase/firebase';
 
 import { Grid, Form, Input, Message, Button, Step, Icon } from 'semantic-ui-react'
 import CSVReader from 'react-csv-reader';
@@ -14,6 +14,7 @@ class AddGroup extends React.Component {
       group: "",
       negative: true,
       positive: true,
+      success: true,
       showStep: 1
     };
   }
@@ -65,16 +66,29 @@ class AddGroup extends React.Component {
   }
 
   handleChange = (value) => {
-    this.setState({ group: value, positive: false })
+    this.setState({ group: value, positive: false, negative: true })
     console.log(value)
   }
 
   onSubmit = () => {
-    this.setState({ showStep: 2 })
+    const { group } = this.state;
+    if (group === "") {
+      this.setState({ negative: false })
+      return
+    }
+    this.setState({ showStep: 2, negative: true })
   }
 
   sendToFb = () => {
-    console.log("We haz arrived")
+    const uid = auth.currentUser.uid;
+    const { data } = this.state;
+    data.forEach(student => {
+      db.collection("users").doc(uid).collection("students").add(student)
+        .then(ref => {
+          console.log("Élément ajouté !", ref);
+          this.setState({ positive: true, negative: true, success: false, data: [] })
+        })
+    })
   }
 
   onDismiss = () => {
@@ -103,7 +117,7 @@ class AddGroup extends React.Component {
   }
 
   render() {
-    const { data, group, showStep, negative, positive } = this.state;
+    const { data, group, showStep, negative, positive, success } = this.state;
     const { deleteMe, handleChange, onSubmit, handleFileUpload, handleFileError, handleTableChange, deleteFormatter } = this;
     const columns = [{
       dataField: 'firstname',
@@ -136,10 +150,13 @@ class AddGroup extends React.Component {
         <Message info hidden={positive}>
           Vous ajoutez une classe de {group}
         </Message>
+        <Message success hidden={success}>
+          La classe a bien été ajoutée !
+        </Message>
 
         <Grid columns={1} centered>
           <Grid.Column mobile={16} tablet={12} computer={10}>
-            <h1 style={{ marginTop: 50, marginBottom: 20 }}>Ajoutez une liste d'élèves à votre application</h1>
+            <h1 style={{ marginBottom: 20 }}>Ajoutez une liste d'élèves à votre application</h1>
             <Step.Group fluid>
               <Step completed={showStep > 1 ? true : false} active={showStep === 1 ? true : false} disabled={showStep === 1 ? false : true}>
                 <Step.Content>
@@ -188,7 +205,7 @@ class AddGroup extends React.Component {
                       <div style={{ marginTop: 40 }}>
                         <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between" }} >
                           Vous pouvez cliquer sur chaque information pour la modifier.
-                        <Button.Group size='large' style={{ alignSelf: "flex-end" }}>
+                          <Button.Group size='large' style={{ alignSelf: "flex-end" }}>
                             <Button attached="top" color='vk' onClick={this.cancelOp}>Annuler</Button>
                             <Button.Or attached="top" text="ou" />
                             <Button attached="top" color='teal' onClick={this.sendToFb}>Valider</Button>
@@ -213,7 +230,5 @@ class AddGroup extends React.Component {
   }
 }
 
-const authCondition = (authUser) => !!authUser;
-
-export default withAuthorization(authCondition)(AddGroup);
+export default AddGroup;
 

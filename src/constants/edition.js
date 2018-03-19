@@ -1,7 +1,7 @@
 export const collections = {
     students: {
         collname: "students",
-        title: "Classes",
+        title: "Élèves",
         filterBar: "group",
         showfield: "name",
         columns: [
