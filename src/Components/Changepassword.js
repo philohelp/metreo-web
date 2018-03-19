@@ -59,6 +59,7 @@ class PasswordChangeForm extends Component {
                     onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
                     type="password"
                     placeholder="Confirmez votre mot de passe"
+                    style={{ marginTop: 10 }}
                 />
                 <div className="cap-readmore-5" style={{ marginTop: 20 }}>
                     <Button disabled={isInvalid} type="submit" className="connect-btn" >

@@ -95,7 +95,7 @@ class AddGroup extends React.Component {
     this.setState({ hidden: true });
   }
 
-  cancelOp = () => {
+  messageCancelOp = () => {
     this.setState({ showStep: 1 });
   }
 
@@ -206,7 +206,7 @@ class AddGroup extends React.Component {
                         <div style={{ fontSize: 14, display: "flex", flexDirection: "row", justifyContent: "space-between" }} >
                           Vous pouvez cliquer sur chaque information pour la modifier.
                           <Button.Group size='large' style={{ alignSelf: "flex-end" }}>
-                            <Button attached="top" color='vk' onClick={this.cancelOp}>Annuler</Button>
+                            <Button attached="top" color='vk' onClick={this.messageCancelOp}>Annuler</Button>
                             <Button.Or attached="top" text="ou" />
                             <Button attached="top" color='teal' onClick={this.sendToFb}>Valider</Button>
                           </Button.Group>

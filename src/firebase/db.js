@@ -154,3 +154,40 @@ export const fillComments = () => {
       this.fillThoseComments(container);
     });
 };
+
+export const fillStudents = () => {
+  const container = [
+    { name: "Dupont", firstname: "Philomène", group: "TES-T" }
+  ]
+  container.forEach(item => {
+    const user = auth.currentUser;
+    const { uid } = user;
+    db
+      .collection("users")
+      .doc(uid)
+      .collection("students")
+      .add(item)
+      .then(ref => {
+        console.log("élève témoin ajouté");
+      });
+  });
+};
+
+export const fillTopics = () => {
+  const container = [
+    { exerctype: "Dissertation", authname: "", title: "Que gagne-t-on à travailler ?" },
+    { exerctype: "Explication", authname: "Nietzsche", title: "'Le travail est la meilleure des polices'" }
+  ]
+  container.forEach(item => {
+    const user = auth.currentUser;
+    const { uid } = user;
+    db
+      .collection("users")
+      .doc(uid)
+      .collection("topics")
+      .add(item)
+      .then(ref => {
+        console.log("sujet témoin ajouté");
+      });
+  });
+};

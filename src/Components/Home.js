@@ -1,7 +1,7 @@
 import React from "react";
 import withAuthorization from "./withAuthorization";
 
-import { Grid, Menu, Segment, Loader } from "semantic-ui-react";
+import { Grid, Menu } from "semantic-ui-react";
 import ScrollUpButton from "react-scroll-up-button";
 
 import AddGroup from "./AddGroup";
@@ -9,6 +9,7 @@ import Edit from "./Edit";
 import Messaging from "./Messaging"
 import { collections } from './../constants/edition';
 import { db, auth } from './../firebase/firebase';
+import Account from "./Account";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 var _ = require('lodash');
@@ -21,11 +22,7 @@ class Home extends React.Component {
       config: {},
       data: [],
       search: "",
-      negative: false,
-      positive: true,
-      mheader: "",
-      mcontent: "",
-      messagehidden: true,
+      message: {},
       confirmhidden: true,
       corridor: "",
       currentlyAdding: [],
@@ -35,9 +32,10 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
+    const message = { hidden: true, positive: true, negative: false, header: "", content: "" }
     const uid = auth.currentUser.uid;
     for (const key in collections) {
-      this.setState({ [key]: [] })
+      this.setState({ [key]: [], message })
       db.collection("users").doc(uid).collection(key).get()
         .then(snapshot => {
           this.addSnapshotToState(snapshot, key)
@@ -84,18 +82,49 @@ class Home extends React.Component {
   // Add, edit and delete items 
 
   handleMessage = (style, header, content) => {
+    let message = {};
+    message.header = header;
+    message.content = content;
     if (style === "positive") {
-      this.setState({ messagehidden: false, positive: true, negative: false, mheader: header, mcontent: content })
+      message.hidden = false;
+      message.positive = true;
+      message.negative = false;
+      message.confirmative = false;
+      this.setState({ message })
       setTimeout(() => {
-        this.setState({ messagehidden: true, positive: true, negative: false, mheader: header, mcontent: content })
+        message.hidden = true;
+        message.positive = true;
+        message.negative = false;
+        message.confirmative = false;
+        this.setState({ message })
       }, 6000)
     } else if (style === "negative") {
-      this.setState({ messagehidden: false, positive: false, negative: true, mheader: header, mcontent: content })
+      message.hidden = false;
+      message.positive = false;
+      message.negative = true;
+      message.confirmative = false;
+      this.setState({ message })
       setTimeout(() => {
-        this.setState({ messagehidden: true, positive: false, negative: true, mheader: header, mcontent: content })
+        message.hidden = true;
+        message.positive = false;
+        message.negative = true;
+        message.confirmative = false;
+        this.setState({ message })
+      }, 6000)
+    } else if (style === "confirmative") {
+      message.hidden = false;
+      message.positive = false;
+      message.negative = false;
+      message.confirmative = true;
+      this.setState({ message })
+      setTimeout(() => {
+        message.hidden = true;
+        message.positive = false;
+        message.negative = false;
+        message.confirmative = true;
+        this.setState({ message })
       }, 6000)
     }
-
   }
 
   handleRedCrossButton = (rowIndex, row) => {
@@ -108,6 +137,7 @@ class Home extends React.Component {
       return
     } else {
       // cancel op
+      this.messageCancelOp()
       this.setState({ currentlyAdding: [] });
       this.refreshStateWithStore();
     }
@@ -118,7 +148,8 @@ class Home extends React.Component {
     const { showfield } = config;
     const message = `L'élément sera retiré de la liste : "${corridor[showfield]}"`
     const id = corridor.id;
-    this.setState({ corridor: id, mheader: "Confirmation", mcontent: message, confirmhidden: false })
+    this.handleMessage("confirmative", "Confirmation", message)
+    this.setState({ corridor: id })
   }
 
   deleteForGood = () => {
@@ -129,11 +160,10 @@ class Home extends React.Component {
     var purgedStore = _.remove(store, (item) => item.id === corridor);
     this.setState({ purged });
     this.fbRemove(corridor)
-    this.setState({ confirmhidden: true })
   }
 
-  cancelOp = () => {
-    this.setState({ confirmhidden: true })
+  messageCancelOp = () => {
+    this.handleMessage("positive", "Annulation", "Opération annulée !")
   }
 
   getRandomInt() {
@@ -281,7 +311,7 @@ class Home extends React.Component {
         return 0;
       });
     }
-    this.updateStateAndStore(result)
+    this.setState({ data: result })
   }
 
   filterWithBar = (filterKey) => {
@@ -367,8 +397,9 @@ class Home extends React.Component {
   }
 
   render() {
-    const { activeItem, config, negative, positive, messagehidden, confirmhidden, mheader, mcontent, data, currentlyAdding, currentlyFilteredBy } = this.state;
-    const { handleTableChange, addNew, fbAdd, handleRedCrossButton, deleteForGood, cancelOp, filterWithBar } = this;
+    const { activeItem, config, data, currentlyAdding, currentlyFilteredBy, message } = this.state;
+    const { hidden, positive, negative, confirmative, header, content } = message;
+    const { handleTableChange, addNew, fbAdd, handleRedCrossButton, deleteForGood, messageCancelOp, filterWithBar } = this;
     const valuesForFilterBar = this.getValuesForFilterBar()
     return (
       <Grid centered style={{ marginTop: 20 }}>
@@ -390,7 +421,6 @@ class Home extends React.Component {
                     disabled={currentlyAdding.length !== 0 || this.state[collections[key].collname].length === 0}
                     onClick={this.handleItemClick}
                   />
-                  <Loader active={this.state[collections[key].collname].length === 0} style={{ marginTop: -188 }} />
                 </div>
               ))
             }
@@ -408,21 +438,19 @@ class Home extends React.Component {
           <Messaging
             negative={negative}
             positive={positive}
-            messagehidden={messagehidden}
-            confirmhidden={confirmhidden}
-            mheader={mheader}
-            mcontent={mcontent}
-            cancelOp={cancelOp}
+            confirmative={confirmative}
+            hidden={hidden}
+            header={header}
+            content={content}
+            messageCancelOp={messageCancelOp}
             deleteForGood={deleteForGood}
           />
-          <div style={{ marginTop: messagehidden ? 90 : 0 }}>
+          <div style={{ marginTop: hidden ? 90 : 0 }}>
             {
               activeItem === "addgroup"
                 ? <AddGroup />
                 : activeItem === "infos"
-                  ? <div>
-                    Rubrique en cours de développement.
-                    </div>
+                  ? <Account />
                   :
                   <Edit
                     config={config}

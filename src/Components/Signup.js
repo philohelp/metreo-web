@@ -50,6 +50,8 @@ class SignUpForm extends Component {
         db.setDefaultUserIfEmpty(authUser, matter, username);
         db.fillEvals()
         db.fillComments()
+        db.fillStudents()
+        db.fillTopics()
         this.setState(() => ({ ...INITIAL_STATE }));
         history.push(routes.HOME);
       })
