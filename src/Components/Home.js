@@ -267,7 +267,7 @@ class Home extends React.Component {
     const uid = auth.currentUser.uid;
     const activeColl = this.state.config.collname;
     if (rowId.length === 20) {
-      await db.collection("users").doc(uid).collection(activeColl).doc(rowId).set(newValue)
+      await db.collection("users").doc(uid).collection(activeColl).doc(rowId).set(newValue, { merge: true })
         .then(ref => {
           console.log("Élément modifié !", rowId, newValue);
           this.handleMessage("positive", "CONFIRMATION", "L'élément a bien été modifié.")
@@ -463,6 +463,7 @@ class Home extends React.Component {
                     filterWithBar={filterWithBar}
                     valuesForFilterBar={valuesForFilterBar}
                     currentlyFilteredBy={currentlyFilteredBy}
+                    activeItem={activeItem}
                   />
             }
           </div>

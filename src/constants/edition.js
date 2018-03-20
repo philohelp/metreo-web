@@ -50,7 +50,8 @@ export const collections = {
             {
                 dataField: 'evalab',
                 text: 'Nom',
-                editCellClasses: 'cell-edit',
+                editable: false,
+                // editCellClasses: 'cell-edit',
                 headerStyle: { width: "10%" },
             },
             {
@@ -88,7 +89,7 @@ export const collections = {
             {
                 dataField: 'exerctype',
                 text: 'Type',
-                editCellClasses: 'cell-edit',
+                // editCellClasses: 'cell-edit',
                 hidden: true
             },
             {
@@ -96,7 +97,7 @@ export const collections = {
                 text: 'Critère',
                 editable: false,
                 headerStyle: { width: "10%" },
-                editCellClasses: 'cell-edit',
+                // editCellClasses: 'cell-edit',
                 sort: true
             },
             {

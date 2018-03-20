@@ -6,14 +6,18 @@ import { textFilter } from 'react-bootstrap-table2-filter';
 import { Grid, Button, Icon } from 'semantic-ui-react';
 
 const Edit = (props) => {
-    const { config, addNew, fbAdd, handleRedCrossButton, handleTableChange, data, currentlyAdding, filterWithBar, currentlyFilteredBy, valuesForFilterBar } = props;
+    const { config, addNew, fbAdd, handleRedCrossButton, handleTableChange, data, currentlyAdding, filterWithBar, currentlyFilteredBy, valuesForFilterBar, activeItem } = props;
     const { title, columns } = config;
     const deleteFormatter = (cell, row, rowIndex, formatExtraData) => {
         return (
             <div>
-                <Button icon color="pink" onClick={() => handleRedCrossButton(rowIndex, row)}>
-                    <Icon name='remove' />
-                </Button>
+                {activeItem !== "evals" ?
+                    <Button icon color="pink" onClick={() => handleRedCrossButton(rowIndex, row)}>
+                        <Icon name='remove' />
+                    </Button>
+                    :
+                    null
+                }
             </div>
         );
     }
@@ -75,20 +79,24 @@ const Edit = (props) => {
                                 <Grid.Column mobile={16} tablet={12} computer={12}>
                                     Vous pouvez cliquer sur chaque information pour la modifier.
                                 </Grid.Column>
-                                <Grid.Column mobile={16} tablet={12} computer={2}>
-                                    {
-                                        currentlyAdding.length !== 0 ?
-                                            <Button attached="top" color='teal' size='big' onClick={fbAdd} style={{ alignSelf: "flex-end" }}>
-                                                <Icon name='check' />
-                                                Sauvegarder
-                                            </Button>
-                                            :
-                                            <Button attached="top" color='vk' size='big' onClick={() => addNew()} style={{ alignSelf: "flex-end" }}>
-                                                <Icon name='add' />
-                                                Ajouter
-                                            </Button>
-                                    }
-                                </Grid.Column>
+                                {activeItem !== "evals" ?
+                                    <Grid.Column mobile={16} tablet={12} computer={2}>
+                                        {
+                                            currentlyAdding.length !== 0 ?
+                                                <Button attached="top" color='teal' size='big' onClick={fbAdd} style={{ alignSelf: "flex-end" }}>
+                                                    <Icon name='check' />
+                                                    Sauvegarder
+                                                                        </Button>
+                                                :
+                                                <Button attached="top" color='vk' size='big' onClick={() => addNew()} style={{ alignSelf: "flex-end" }}>
+                                                    <Icon name='add' />
+                                                    Ajouter
+                                                                        </Button>
+                                        }
+                                    </Grid.Column>
+                                    :
+                                    <Grid.Column mobile={16} tablet={12} computer={2} />
+                                }
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column mobile={16} tablet={16} computer={14}>
